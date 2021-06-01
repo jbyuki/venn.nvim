@@ -1,14 +1,15 @@
 venn.nvim
 =========
 
-[![Untitled-Project.gif](https://i.postimg.cc/mkGpFr2c/Untitled-Project.gif)](https://postimg.cc/2b27srWm)
+![](https://github.com/jbyuki/gifs/blob/main/Untitled%20Project.gif?raw=true)
+
 
 Draw ASCII diagrams in Neovim.
 
 Installation
 ------------
 
-Install using your prefered method for example using [vim-plgu](https://github.com/junegunn/vim-plug).
+Install using your prefered method for example using [vim-plug](https://github.com/junegunn/vim-plug).
 
 ```vim
 Plug 'jbyuki/venn.nvim'
