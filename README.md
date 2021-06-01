@@ -1,7 +1,7 @@
 venn.nvim
 =========
 
-[![Untitled-Project.gif](https://i.postimg.cc/DzXhK8SH/Untitled-Project.gif)](https://postimg.cc/06PFY5d0)
+[![Untitled-Project.gif](https://i.postimg.cc/mkGpFr2c/Untitled-Project.gif)](https://postimg.cc/2b27srWm)
 
 Draw ASCII diagrams in Neovim.
 
