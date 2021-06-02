@@ -30,10 +30,20 @@ function M.draw_box()
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
   
+  if slnum > elnum then
+    slnum, elnum = elnum, slnum
+    sbyte, ebyte = ebyte, sbyte
+    vscol, vecol = vecol, vscol
+  end
+  
   
   local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
   local scol = M.get_width(lines[1], sbyte-1) + vscol
   local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
+  
+  if scol > ecol then
+    scol, ecol = ecol, scol
+  end
   
   local w = ecol - scol + 1
   local h = elnum - slnum + 1
@@ -63,45 +73,45 @@ function M.draw_box()
   end
   
   if w == 1 then
-    local start
+    local tail
     if clnum == elnum then
       local sbyte = M.get_bytes(lines[1], scol)
       local ebyte = M.get_bytes(lines[1], scol+1)
     
-      c = lines[1]:sub(sbyte+1, ebyte)
+      local ptail = lines[1]:sub(sbyte+1, ebyte)
     
-      if c == arrow_chars.left then
-        start = line_chars.topleft
-      elseif c == arrow_chars.right then
-        start = line_chars.topright
-      elseif c == line_chars.botleft then
-        start = line_chars.vertright
-      elseif c == line_chars.botright then 
-        start = line_chars.vertleft
-      elseif c == line_chars.horiup then 
-        start = line_chars.cross
-      elseif c == line_chars.hori then
-        start = line_chars.horidown
+      if ptail == arrow_chars.left then
+        tail = line_chars.topleft
+      elseif ptail == arrow_chars.right then
+        tail = line_chars.topright
+      elseif ptail == line_chars.botleft then
+        tail = line_chars.vertright
+      elseif ptail == line_chars.botright then 
+        tail = line_chars.vertleft
+      elseif ptail == line_chars.horiup then 
+        tail = line_chars.cross
+      elseif ptail == line_chars.hori then
+        tail = line_chars.horidown
       end
       
     else
       local sbyte = M.get_bytes(lines[#lines], ecol)
       local ebyte = M.get_bytes(lines[#lines], ecol+1)
     
-      c = lines[#lines]:sub(sbyte+1, ebyte)
+      local ptail = lines[#lines]:sub(sbyte+1, ebyte)
     
-      if c == arrow_chars.left then
-        start = line_chars.botleft
-      elseif c == arrow_chars.right then
-        start = line_chars.botright
-      elseif c == line_chars.topright then
-        start = line_chars.vertleft
-      elseif c == line_chars.topleft then
-        start = line_chars.vertright
-      elseif c == line_chars.horidown then
-        start = line_chars.cross
-      elseif c == line_chars.hori then
-        start = line_chars.horiup
+      if ptail == arrow_chars.left then
+        tail = line_chars.botleft
+      elseif ptail == arrow_chars.right then
+        tail = line_chars.botright
+      elseif ptail == line_chars.topright then
+        tail = line_chars.vertleft
+      elseif ptail == line_chars.topleft then
+        tail = line_chars.vertright
+      elseif ptail == line_chars.horidown then
+        tail = line_chars.cross
+      elseif ptail == line_chars.hori then
+        tail = line_chars.horiup
       end
       
     end
@@ -119,7 +129,7 @@ function M.draw_box()
         end
         
       elseif i == elnum-1 or i == slnum-1 then
-        c = start or line_chars.vert
+        c = tail or line_chars.vert
       else
         c = line_chars.vert
       end
@@ -127,46 +137,57 @@ function M.draw_box()
     end
     
   elseif h == 1 then
-    local start
+    local tail, head
     if ccol == ecol then
       local sbyte = M.get_bytes(lines[1], scol)
       local ebyte = M.get_bytes(lines[1], scol+1)
     
-      c = lines[1]:sub(sbyte+1, ebyte)
+      local ptail = lines[1]:sub(sbyte+1, ebyte)
     
-      if c == arrow_chars.up then
-        start = line_chars.topleft
-      elseif c == arrow_chars.down then
-        start = line_chars.botleft
-      elseif c == line_chars.topright then
-        start = line_chars.horidown
-      elseif c == line_chars.vertleft then
-        start = line_chars.cross
-      elseif c == line_chars.botright then
-        start = line_chars.horiup
-      elseif c == line_chars.vert then
-        start = line_chars.vertright
+      local sbyte = M.get_bytes(lines[1], ecol)
+      local ebyte = M.get_bytes(lines[1], ecol+1)
+    
+      local phead = lines[1]:sub(sbyte+1, ebyte)
+    
+      if ptail == arrow_chars.up then
+        tail = line_chars.topleft
+      elseif ptail == arrow_chars.down then
+        tail = line_chars.botleft
+      elseif ptail == line_chars.topright then
+        tail = line_chars.horidown
+      elseif ptail == line_chars.vertleft then
+        tail = line_chars.cross
+      elseif ptail == line_chars.botright then
+        tail = line_chars.horiup
+      elseif ptail == line_chars.vert then
+        tail = line_chars.vertright
       end
       
     else
       local sbyte = M.get_bytes(lines[1], ecol)
       local ebyte = M.get_bytes(lines[1], ecol+1)
     
-      c = lines[#lines]:sub(sbyte+1, ebyte)
+      local ptail = lines[#lines]:sub(sbyte+1, ebyte)
     
-      if c == arrow_chars.up then
-        start = line_chars.topright
-      elseif c == arrow_chars.down then
-        start = line_chars.botright
-      elseif c == line_chars.topleft then
-        start = line_chars.horidown
-      elseif c == line_chars.vertright then
-        start = line_chars.cross
-      elseif c == line_chars.botleft then
-        start = line_chars.horiup
-      elseif c == line_chars.vert then
-        start = line_chars.vertleft
+      local sbyte = M.get_bytes(lines[1], scol)
+      local ebyte = M.get_bytes(lines[1], scol+1)
+    
+      local phead = lines[1]:sub(sbyte+1, ebyte)
+    
+      if ptail == arrow_chars.up then
+        tail = line_chars.topright
+      elseif ptail == arrow_chars.down then
+        tail = line_chars.botright
+      elseif ptail == line_chars.topleft then
+        tail = line_chars.horidown
+      elseif ptail == line_chars.vertright then
+        tail = line_chars.cross
+      elseif ptail == line_chars.botleft then
+        tail = line_chars.horiup
+      elseif ptail == line_chars.vert then
+        tail = line_chars.vertleft
       end
+      
     end
     
     local line = ''
@@ -180,7 +201,7 @@ function M.draw_box()
         end
         
       elseif i == scol or i == ecol then
-        c = start or line_chars.hori
+        c = tail or line_chars.hori
       else
         c = line_chars.hori
       end
