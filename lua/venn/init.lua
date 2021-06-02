@@ -30,13 +30,6 @@ function M.draw_box()
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
   
-  if slnum > elnum then
-    slnum, elnum = elnum, slnum
-    sbyte, ebyte = ebyte, sbyte
-    vscol, vecol = vecol, vscol
-  end
-  
-  
   local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
   local scol = M.get_width(lines[1], sbyte-1) + vscol
   local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
@@ -73,12 +66,17 @@ function M.draw_box()
   end
   
   if w == 1 then
-    local tail
+    local tail, head
     if clnum == elnum then
       local sbyte = M.get_bytes(lines[1], scol)
       local ebyte = M.get_bytes(lines[1], scol+1)
     
       local ptail = lines[1]:sub(sbyte+1, ebyte)
+    
+      local sbyte = M.get_bytes(lines[#lines], ecol)
+      local ebyte = M.get_bytes(lines[#lines], ecol+1)
+    
+      local phead = lines[#lines]:sub(sbyte+1, ebyte)
     
       if ptail == arrow_chars.left then
         tail = line_chars.topleft
@@ -94,11 +92,26 @@ function M.draw_box()
         tail = line_chars.horidown
       end
       
+      if phead == line_chars.hori then
+        head = line_chars.horiup
+      elseif phead == line_chars.topleft then
+        head = line_chars.vertleft
+      elseif phead == line_chars.topright then
+        head = line_chars.vertright
+      elseif phead == line_chars.horidown then
+        head = line_chars.cross
+      end
+      
     else
       local sbyte = M.get_bytes(lines[#lines], ecol)
       local ebyte = M.get_bytes(lines[#lines], ecol+1)
     
       local ptail = lines[#lines]:sub(sbyte+1, ebyte)
+    
+      local sbyte = M.get_bytes(lines[1], scol)
+      local ebyte = M.get_bytes(lines[1], scol+1)
+    
+      local phead = lines[1]:sub(sbyte+1, ebyte)
     
       if ptail == arrow_chars.left then
         tail = line_chars.botleft
@@ -114,6 +127,15 @@ function M.draw_box()
         tail = line_chars.horiup
       end
       
+      if phead == line_chars.hori then
+        head = line_chars.horidown
+      elseif phead == line_chars.botleft then
+        head = line_chars.vertright
+      elseif phead == line_chars.botright then
+        head = line_chars.vertleft
+      elseif phead == line_chars.horiup then
+        head = line_chars.cross
+      end
     end
     
     for i=slnum-1,elnum-1 do
@@ -123,9 +145,9 @@ function M.draw_box()
       local c
       if i+1 == clnum then
         if i == slnum-1 then
-          c = arrow_chars.up
+          c = head or arrow_chars.up
         else
-          c = arrow_chars.down
+          c = head or arrow_chars.down
         end
         
       elseif i == elnum-1 or i == slnum-1 then
@@ -163,6 +185,16 @@ function M.draw_box()
         tail = line_chars.vertright
       end
       
+      if phead == line_chars.topleft then
+        head = line_chars.horidown
+      elseif phead == line_chars.botleft then
+        head = line_chars.horiup
+      elseif phead == line_chars.vert then
+        head = line_chars.vertleft
+      elseif phead == line_chars.vertright then
+        head = line_chars.cross
+      end
+      
     else
       local sbyte = M.get_bytes(lines[1], ecol)
       local ebyte = M.get_bytes(lines[1], ecol+1)
@@ -188,6 +220,16 @@ function M.draw_box()
         tail = line_chars.vertleft
       end
       
+      if phead == line_chars.topright then
+        head = line_chars.horidown
+      elseif phead == line_chars.botright then
+        head = line_chars.horiup
+      elseif phead == line_chars.vert then
+        head = line_chars.vertright
+      elseif phead == line_chars.vertleft then
+        head = line_chars.cross
+      end
+      
     end
     
     local line = ''
@@ -195,9 +237,9 @@ function M.draw_box()
       local c 
       if i == ccol then
         if i == scol then
-          c = arrow_chars.left
+          c = head or arrow_chars.left
         else
-          c = arrow_chars.right
+          c = head or arrow_chars.right
         end
         
       elseif i == scol or i == ecol then

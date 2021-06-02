@@ -37,13 +37,6 @@ end
 local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
 local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
-if slnum > elnum then
-  slnum, elnum = elnum, slnum
-  sbyte, ebyte = ebyte, sbyte
-  vscol, vecol = vecol, vscol
-end
-
-
 @get_lines_in_range+=
 local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
 local scol = M.get_width(lines[1], sbyte-1) + vscol
@@ -223,9 +216,9 @@ end
 
 @determine_arrow_up_or_down+=
 if i == slnum-1 then
-  c = arrow_chars.up
+  c = head or arrow_chars.up
 else
-  c = arrow_chars.down
+  c = head or arrow_chars.down
 end
 
 @draw_horizontal_line+=
@@ -248,18 +241,23 @@ vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
 @determine_if_arrow_left_or_right+=
 if i == scol then
-  c = arrow_chars.left
+  c = head or arrow_chars.left
 else
-  c = arrow_chars.right
+  c = head or arrow_chars.right
 end
 
 @connect_line_if_possible_vertical+=
-local tail
+local tail, head
 if clnum == elnum then
   local sbyte = M.get_bytes(lines[1], scol)
   local ebyte = M.get_bytes(lines[1], scol+1)
 
   local ptail = lines[1]:sub(sbyte+1, ebyte)
+
+  local sbyte = M.get_bytes(lines[#lines], ecol)
+  local ebyte = M.get_bytes(lines[#lines], ecol+1)
+
+  local phead = lines[#lines]:sub(sbyte+1, ebyte)
 
   @connect_line_going_down
 else
@@ -267,6 +265,11 @@ else
   local ebyte = M.get_bytes(lines[#lines], ecol+1)
 
   local ptail = lines[#lines]:sub(sbyte+1, ebyte)
+
+  local sbyte = M.get_bytes(lines[1], scol)
+  local ebyte = M.get_bytes(lines[1], scol+1)
+
+  local phead = lines[1]:sub(sbyte+1, ebyte)
 
   @connect_line_going_up
 end
@@ -373,3 +376,45 @@ elseif ptail == line_chars.vert then
 end
 
 @connect_line_going_right+=
+if phead == line_chars.topleft then
+  head = line_chars.horidown
+elseif phead == line_chars.botleft then
+  head = line_chars.horiup
+elseif phead == line_chars.vert then
+  head = line_chars.vertleft
+elseif phead == line_chars.vertright then
+  head = line_chars.cross
+end
+
+@connect_line_going_left+=
+if phead == line_chars.topright then
+  head = line_chars.horidown
+elseif phead == line_chars.botright then
+  head = line_chars.horiup
+elseif phead == line_chars.vert then
+  head = line_chars.vertright
+elseif phead == line_chars.vertleft then
+  head = line_chars.cross
+end
+
+@connect_line_going_down+=
+if phead == line_chars.hori then
+  head = line_chars.horiup
+elseif phead == line_chars.topleft then
+  head = line_chars.vertleft
+elseif phead == line_chars.topright then
+  head = line_chars.vertright
+elseif phead == line_chars.horidown then
+  head = line_chars.cross
+end
+
+@connect_line_going_up+=
+if phead == line_chars.hori then
+  head = line_chars.horidown
+elseif phead == line_chars.botleft then
+  head = line_chars.vertright
+elseif phead == line_chars.botright then
+  head = line_chars.vertleft
+elseif phead == line_chars.horiup then
+  head = line_chars.cross
+end
