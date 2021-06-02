@@ -20,6 +20,8 @@ function M.draw_box()
     @draw_over_box_bottom
     @draw_over_box_left_right
   end
+
+  @restore_cursor_position
 end
 
 @implement+=
@@ -384,6 +386,8 @@ elseif phead == line_chars.vert then
   head = line_chars.vertleft
 elseif phead == line_chars.vertright then
   head = line_chars.cross
+elseif phead == line_chars.hori then
+  head = line_chars.hori
 end
 
 @connect_line_going_left+=
@@ -395,6 +399,8 @@ elseif phead == line_chars.vert then
   head = line_chars.vertright
 elseif phead == line_chars.vertleft then
   head = line_chars.cross
+elseif phead == line_chars.hori then
+  head = line_chars.hori
 end
 
 @connect_line_going_down+=
@@ -406,6 +412,8 @@ elseif phead == line_chars.topright then
   head = line_chars.vertright
 elseif phead == line_chars.horidown then
   head = line_chars.cross
+elseif phead == line_chars.vert then
+  head = line_chars.vert
 end
 
 @connect_line_going_up+=
@@ -417,4 +425,14 @@ elseif phead == line_chars.botright then
   head = line_chars.vertleft
 elseif phead == line_chars.horiup then
   head = line_chars.cross
+elseif phead == line_chars.vert then
+  head = line_chars.vert
 end
+
+@restore_cursor_position+=
+local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+local sbyte
+sbyte = M.get_bytes(line, ccol)
+print(vim.inspect(line), sbyte)
+
+vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })

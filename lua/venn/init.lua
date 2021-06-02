@@ -100,6 +100,8 @@ function M.draw_box()
         head = line_chars.vertright
       elseif phead == line_chars.horidown then
         head = line_chars.cross
+      elseif phead == line_chars.vert then
+        head = line_chars.vert
       end
       
     else
@@ -135,7 +137,10 @@ function M.draw_box()
         head = line_chars.vertleft
       elseif phead == line_chars.horiup then
         head = line_chars.cross
+      elseif phead == line_chars.vert then
+        head = line_chars.vert
       end
+      
     end
     
     for i=slnum-1,elnum-1 do
@@ -193,6 +198,8 @@ function M.draw_box()
         head = line_chars.vertleft
       elseif phead == line_chars.vertright then
         head = line_chars.cross
+      elseif phead == line_chars.hori then
+        head = line_chars.hori
       end
       
     else
@@ -228,6 +235,8 @@ function M.draw_box()
         head = line_chars.vertright
       elseif phead == line_chars.vertleft then
         head = line_chars.cross
+      elseif phead == line_chars.hori then
+        head = line_chars.hori
       end
       
     end
@@ -304,6 +313,13 @@ function M.draw_box()
     end
     
   end
+
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local sbyte
+  sbyte = M.get_bytes(line, ccol)
+  print(vim.inspect(line), sbyte)
+  
+  vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
 end
 
 function M.get_width(line, byte)
