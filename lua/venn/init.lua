@@ -317,8 +317,6 @@ function M.draw_box()
   local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
   local sbyte
   sbyte = M.get_bytes(line, ccol)
-  print(vim.inspect(line), sbyte)
-  
   vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
 end
 
