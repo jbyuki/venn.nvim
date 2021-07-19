@@ -9,10 +9,15 @@ Draw ASCII diagrams in Neovim.
 Installation
 ------------
 
-Install using your prefered method for example using [vim-plug](https://github.com/junegunn/vim-plug).
-
+Install using your prefered method:
+- [vim-plug](https://github.com/junegunn/vim-plug).
 ```vim
 Plug 'jbyuki/venn.nvim'
+```
+
+- [packer.nvim](https://github.com/wbthomason/packer.nvim)
+```lua
+use "jbyuki/venn.nvim"
 ```
 
 Usage
