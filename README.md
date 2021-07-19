@@ -10,9 +10,13 @@ Installation
 ------------
 
 Install using your prefered method for example using [vim-plug](https://github.com/junegunn/vim-plug).
-
 ```vim
 Plug 'jbyuki/venn.nvim'
+```
+
+[Packer](https://github.com/wbthomason/packer.nvim)
+```lua
+use "jbyuki/venn.nvim"
 ```
 
 Usage
