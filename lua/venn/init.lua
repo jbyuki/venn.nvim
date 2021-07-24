@@ -378,8 +378,224 @@ function M.get_bytes(line, col)
   return string.len(line)
 end
 
-function M.draw_box_over()
+function M.draw_box_over(style)
+  -- line is 1 indexed, col is 0 indexed 
+  local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
+  local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
+
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+  local scol = M.get_width(lines[1], sbyte-1) + vscol
+  local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
+
+  if scol > ecol then
+    scol, ecol = ecol, scol
+  end
+
+  local w = ecol - scol + 1
+  local h = elnum - slnum + 1
+
+
+  vim.api.nvim_command [[normal gv]]
+
+  local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
+  local ccol = M.get_width(lines[1], cbyte-1) + vccol
+
+  vim.api.nvim_command [[normal vv]]
+
+
+  for i=1,#lines do
+    local len = M.get_width(lines[i])
+    local diff = ecol - len + 1
+    if diff > 0 then
+      local extend = ""
+      for _=1,diff do
+        extend = extend .. " "
+      end
+      local eol = string.len(lines[i])
+      vim.api.nvim_buf_set_text(0, slnum-1+(i-1), eol, slnum-1+(i-1), eol, { extend })
+      lines[i] = lines[i] .. extend
+
+    end
+  end
+
+  if w == 1 then
+    for i=slnum-1,elnum-1 do
+      local sbyte = M.get_bytes(lines[i-slnum+2], scol)
+      local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
+
+      local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
+      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+
+      local c
+      if i+1 == clnum then
+        if i == slnum-1 then
+          c = arrow_chars.up
+          pold_opts[2] = style
+        else
+          c = arrow_chars.down
+          pold_opts[1] = style
+        end
+
+      elseif i == elnum-1 or i == slnum-1 then
+        pold_opts[1] = style
+        pold_opts[2] = style
+        c = M.gen({style, style, " ", " " })
+      else
+        pold_opts[1] = style
+        pold_opts[2] = style
+        c = M.gen({style, style, " ", " " })
+      end
+
+      c = M.gen(pold_opts) or c
+      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
+    end
+
+  elseif h == 1 then
+    local line = ''
+    for i=scol,ecol do
+      local sbyte = M.get_bytes(lines[1], i)
+      local ebyte = M.get_bytes(lines[1], i+1)
+
+      local pold = lines[1]:sub(sbyte+1, ebyte)
+
+      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+
+      local c 
+      if i == ccol then
+        if i == scol then
+          c = arrow_chars.left
+          pold_opts[4] = style
+        else
+          c = arrow_chars.right
+          pold_opts[3] = style
+        end
+      elseif i == scol or i == ecol then
+        pold_opts[3] = style
+        pold_opts[4] = style
+        c = M.gen({" ", " ", style, style })
+      else
+        pold_opts[3] = style
+        pold_opts[4] = style
+        c = M.gen({" ", " ", style, style })
+      end
+
+      c = M.gen(pold_opts) or c
+
+      line = line .. c
+    end
+
+    local sbyte = M.get_bytes(lines[1], scol)
+    local ebyte = M.get_bytes(lines[1], ecol+1)
+    vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
+
+  else
+    local topborder = ""
+    for i=scol,ecol do
+      local sbyte = M.get_bytes(lines[1], i)
+      local ebyte = M.get_bytes(lines[1], i+1)
+
+      local pold = lines[1]:sub(sbyte+1, ebyte)
+
+      if i == scol then
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[2] = style
+        pold_opts[4] = style
+        local old = M.gen(pold_opts) or M.gen({" ", style, " ", style})
+        topborder = topborder .. old
+
+      elseif i == ecol then
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[2] = style
+        pold_opts[3] = style
+        local old = M.gen(pold_opts) or M.gen({" ", style, style, " "})
+        topborder = topborder .. old
+
+      else
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[3] = style
+        pold_opts[4] = style
+        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style})
+        topborder = topborder .. old
+
+
+      end
+    end
+    local sbyte = M.get_bytes(lines[1], scol)
+    local ebyte = M.get_bytes(lines[1], ecol+1)
+    vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { topborder })
+
+    local botborder = ""
+    for i=scol,ecol do
+      local sbyte = M.get_bytes(lines[#lines], i)
+      local ebyte = M.get_bytes(lines[#lines], i+1)
+
+      local pold = lines[#lines]:sub(sbyte+1, ebyte)
+
+      if i == scol then
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[1] = style
+        pold_opts[4] = style
+        local old = M.gen(pold_opts) or M.gen({style, " ", " ", style})
+        botborder = botborder .. old
+
+      elseif i == ecol then
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[1] = style
+        pold_opts[3] = style
+        local old = M.gen(pold_opts) or M.gen({style, " ", style, " "})
+        botborder = botborder .. old
+
+      else
+        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        pold_opts[3] = style
+        pold_opts[4] = style
+        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style })
+        botborder = botborder .. old
+
+      end
+    end
+
+    local sbyte = M.get_bytes(lines[#lines], scol)
+    local ebyte = M.get_bytes(lines[#lines], ecol+1)
+    vim.api.nvim_buf_set_text(0, elnum-1, sbyte, elnum-1, ebyte, { botborder })
+
+    for i=slnum,elnum-2 do
+      local len = string.len(lines[i-slnum+2])
+      local sbyte = M.get_bytes(lines[i-slnum+2], scol)
+      local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
+
+      local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
+      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      pold_opts[1] = style
+      pold_opts[2] = style
+      local old = M.gen(pold_opts)
+      local old = old or M.gen({style, style, " ", " " })
+
+      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { old })
+      lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
+
+      local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
+      local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
+
+      local pold = lines[i-slnum+2]:sub(ebyte+1, ebyte_end)
+      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      pold_opts[1] = style
+      pold_opts[2] = style
+      local old = M.gen(pold_opts)
+      local old = old or M.gen({style, style, " ", " " })
+
+      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { old })
+
+    end
+
+  end
+
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local sbyte
+  sbyte = M.get_bytes(line, ccol)
+  vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
 end
+
 function M.gen(opts)
   for c, opt in pairs(charset) do
     if opt[1] == opts[1] and opt[2] == opts[2] and opt[3] == opts[3] and opt[4] == opts[4] then
