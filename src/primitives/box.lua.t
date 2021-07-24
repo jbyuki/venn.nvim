@@ -1,6 +1,6 @@
 ##../venn
 @implement+=
-function M.draw_box()
+function M.draw_box(style)
   @get_box_dimensions
   @get_lines_in_range
 
@@ -108,26 +108,14 @@ local sbyte = M.get_bytes(lines[1], scol)
 local ebyte = M.get_bytes(lines[1], ecol+1)
 vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { topborder })
 
-@script_variables+=
-local box_chars = {
-	topleft  = '┌', topright = '┐', top      = '─', left     = '│',
-	right    = '│', botleft  = '└', botright = '┘', bot      = '─',
-  @box_chars
-}
-
-@implement+=
-function M.set_box_chars(borders)
-  box_chars = borders
-end
-
 @draw_upper_left+=
-topborder = topborder .. box_chars.topleft
+topborder = topborder .. M.gen({" ", style, " ", style})
 
 @draw_upper_right+=
-topborder = topborder .. box_chars.topright
+topborder = topborder .. M.gen({" ", style, style, " " })
 
 @draw_upper_edge+=
-topborder = topborder .. box_chars.top
+topborder = topborder .. M.gen({" ", " ", style, style })
 
 @draw_over_box_bottom+=
 local botborder = ""
@@ -146,13 +134,13 @@ local ebyte = M.get_bytes(lines[#lines], ecol+1)
 vim.api.nvim_buf_set_text(0, elnum-1, sbyte, elnum-1, ebyte, { botborder })
 
 @draw_lower_left+=
-botborder = botborder .. box_chars.botleft
+botborder = botborder .. M.gen({style, " ", " ", style })
 
 @draw_lower_right+=
-botborder = botborder .. box_chars.botright
+botborder = botborder .. M.gen({style, " ", style, " " })
 
 @draw_lower_edge+=
-botborder = botborder .. box_chars.bot
+botborder = botborder .. M.gen({" ", " ", style, style })
 
 @draw_over_box_left_right+=
 for i=slnum,elnum-2 do
@@ -164,7 +152,7 @@ end
 local len = string.len(lines[i-slnum+2])
 local sbyte = M.get_bytes(lines[i-slnum+2], scol)
 local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
-vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { box_chars.left })
+vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen({style, style, " ", " " }) })
 lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 
 @scratch+=
@@ -178,27 +166,12 @@ lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 @draw_right_border+=
 local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
 local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
-vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { box_chars.right })
+vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
 
 @script_variables+=
-local line_chars = {
-  vert = '│',
-  hori = '─',
-  @line_chars
-}
-
 local arrow_chars = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
-
-@implement+=
-function M.set_line_chars(chars)
-  line_chars = chars
-end
-
-function M.set_arrow_chars(chars)
-  arrow_chars = chars
-end
 
 @draw_vertical_line+=
 for i=slnum-1,elnum-1 do
@@ -209,9 +182,9 @@ for i=slnum-1,elnum-1 do
   if i+1 == clnum then
     @determine_arrow_up_or_down
   elseif i == elnum-1 or i == slnum-1 then
-    c = tail or line_chars.vert
+    c = tail or M.gen({style, style, " ", " " })
   else
-    c = line_chars.vert
+    c = M.gen({style, style, " ", " " })
   end
   vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
 end
@@ -230,9 +203,9 @@ for i=scol,ecol do
   if i == ccol then
     @determine_if_arrow_left_or_right
   elseif i == scol or i == ecol then
-    c = tail or line_chars.hori
+    c = tail or M.gen({" ", " ", style, style })
   else
-    c = line_chars.hori
+    c = M.gen({" ", " ", style, style })
   end
   line = line .. c
 end
@@ -277,41 +250,17 @@ else
 end
 
 @connect_line_going_down+=
-if ptail == arrow_chars.left then
-  tail = line_chars.topleft
-elseif ptail == arrow_chars.right then
-  tail = line_chars.topright
-elseif ptail == line_chars.botleft then
-  tail = line_chars.vertright
-elseif ptail == line_chars.botright then 
-  tail = line_chars.vertleft
-elseif ptail == line_chars.horiup then 
-  tail = line_chars.cross
-elseif ptail == line_chars.hori then
-  tail = line_chars.horidown
-elseif ptail == line_chars.topright then
-  tail = line_chars.topright
-elseif ptail == line_chars.horidown then
-  tail = line_chars.horidown
+local ptail_opts = M.parse(ptail)
+if ptail_opts then
+  ptail_opts[2] = style
+  tail = M.gen(ptail_opts) or tail
 end
 
 @connect_line_going_up+=
-if ptail == arrow_chars.left then
-  tail = line_chars.botleft
-elseif ptail == arrow_chars.right then
-  tail = line_chars.botright
-elseif ptail == line_chars.topright then
-  tail = line_chars.vertleft
-elseif ptail == line_chars.topleft then
-  tail = line_chars.vertright
-elseif ptail == line_chars.horidown then
-  tail = line_chars.cross
-elseif ptail == line_chars.hori then
-  tail = line_chars.horiup
-elseif ptail == line_chars.botright then
-  tail = line_chars.botright
-elseif ptail == line_chars.horiup then
-  tail = line_chars.horiup
+local ptail_opts = M.parse(ptail)
+if ptail_opts then
+  ptail_opts[1] = style
+  tail = M.gen(ptail_opts) or tail
 end
 
 @connect_line_if_possible_horizontal+=
@@ -342,107 +291,46 @@ else
   @connect_line_going_left
 end
 
-@line_chars+=
-horidown = '┬',
-vertleft = '┤',
-cross = '┼',
-horiup = '┴',
-topleft  = '┌', 
-topright = '┐', 
-botleft  = '└', 
-botright = '┘',
-
 @connect_line_going_right+=
-if ptail == arrow_chars.up then
-  tail = line_chars.topleft
-elseif ptail == arrow_chars.down then
-  tail = line_chars.botleft
-elseif ptail == line_chars.topright then
-  tail = line_chars.horidown
-elseif ptail == line_chars.vertleft then
-  tail = line_chars.cross
-elseif ptail == line_chars.botright then
-  tail = line_chars.horiup
-elseif ptail == line_chars.vert then
-  tail = line_chars.vertright
-elseif ptail == line_chars.topleft then
-  tail = line_chars.topleft
-elseif ptail == line_chars.vertright then
-  tail = line_chars.vertright
-end
-
-@line_chars+=
-vertright = '├',
-
-@connect_line_going_left+=
-if ptail == arrow_chars.up then
-  tail = line_chars.topright
-elseif ptail == arrow_chars.down then
-  tail = line_chars.botright
-elseif ptail == line_chars.topleft then
-  tail = line_chars.horidown
-elseif ptail == line_chars.vertright then
-  tail = line_chars.cross
-elseif ptail == line_chars.botleft then
-  tail = line_chars.horiup
-elseif ptail == line_chars.vert then
-  tail = line_chars.vertleft
-elseif ptail == line_chars.topright then
-  tail = line_chars.topright
-elseif ptail == line_chars.vertleft then
-  tail = line_chars.vertleft
-end
-
-@connect_line_going_right+=
-if phead == line_chars.topleft then
-  head = line_chars.horidown
-elseif phead == line_chars.botleft then
-  head = line_chars.horiup
-elseif phead == line_chars.vert then
-  head = line_chars.vertleft
-elseif phead == line_chars.vertright then
-  head = line_chars.cross
-elseif phead == line_chars.hori then
-  head = line_chars.hori
+local ptail_opts = M.parse(ptail)
+if ptail_opts then
+  ptail_opts[4] = style
+  tail = M.gen(ptail_opts) or tail
 end
 
 @connect_line_going_left+=
-if phead == line_chars.topright then
-  head = line_chars.horidown
-elseif phead == line_chars.botright then
-  head = line_chars.horiup
-elseif phead == line_chars.vert then
-  head = line_chars.vertright
-elseif phead == line_chars.vertleft then
-  head = line_chars.cross
-elseif phead == line_chars.hori then
-  head = line_chars.hori
+local ptail_opts = M.parse(ptail)
+if tail_opts then
+  ptail_opts[3] = style
+  tail = M.gen(ptail_opts) or tail
+end
+
+@connect_line_going_right+=
+local phead_opts = M.parse(phead)
+if phead_opts then
+  phead_opts[3] = style
+  head = M.gen(phead_opts) or head
+end
+
+@connect_line_going_left+=
+local phead_opts = M.parse(phead)
+if phead_opts then
+  phead_opts[4] = style
+  head = M.gen(phead_opts) or head
 end
 
 @connect_line_going_down+=
-if phead == line_chars.hori then
-  head = line_chars.horiup
-elseif phead == line_chars.topleft then
-  head = line_chars.vertleft
-elseif phead == line_chars.topright then
-  head = line_chars.vertright
-elseif phead == line_chars.horidown then
-  head = line_chars.cross
-elseif phead == line_chars.vert then
-  head = line_chars.vert
+local phead_opts = M.parse(phead)
+if phead_opts then
+  phead_opts[1] = style
+  head = M.gen(phead_opts) or head
 end
 
 @connect_line_going_up+=
-if phead == line_chars.hori then
-  head = line_chars.horidown
-elseif phead == line_chars.botleft then
-  head = line_chars.vertright
-elseif phead == line_chars.botright then
-  head = line_chars.vertleft
-elseif phead == line_chars.horiup then
-  head = line_chars.cross
-elseif phead == line_chars.vert then
-  head = line_chars.vert
+local phead_opts = M.parse(phead)
+if phead_opts then
+  phead_opts[2] = style
+  head = M.gen(phead_opts) or head
 end
 
 @restore_cursor_position+=

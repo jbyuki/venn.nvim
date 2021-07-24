@@ -1,31 +1,116 @@
 -- Generated using ntangle.nvim
-local box_chars = {
-	topleft  = '┌', topright = '┐', top      = '─', left     = '│',
-	right    = '│', botleft  = '└', botright = '┘', bot      = '─',
-}
-
-local line_chars = {
-  vert = '│',
-  hori = '─',
-  horidown = '┬',
-  vertleft = '┤',
-  cross = '┼',
-  horiup = '┴',
-  topleft  = '┌', 
-  topright = '┐', 
-  botleft  = '└', 
-  botright = '┘',
-
-  vertright = '├',
-
-}
-
 local arrow_chars = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
 
+local charset = {
+  --      { up , down, left, right }
+  --      s : single
+  --      d : double
+  --      b : bold
+  [" "] = { " ", " " , " ", " " },
+  ["│"] = { "s", "s" , " ", " " },
+  ["┤"] = { "s", "s" , "s", " " },
+  ["╡"] = { "s", "s" , "d", " " },
+  ["╢"] = { "d", "d" , "s", " " },
+  ["╖"] = { " ", "d" , "s", " " },
+  ["╕"] = { " ", "s" , "d", " " },
+  ["╣"] = { "d", "d" , "d", " " },
+  ["║"] = { "d", "d" , " ", " " },
+  ["╗"] = { " ", "d" , "d", " " },
+  ["╝"] = { "d", " " , "d", " " },
+  ["╜"] = { "d", " " , "s", " " },
+  ["╛"] = { "s", " " , "d", " " },
+  ["┐"] = { " ", "s" , "s", " " },
+  ["└"] = { "s", " " , " ", "s" },
+  ["┴"] = { "s", " " , "s", "s" },
+  ["┬"] = { " ", "s" , "s", "s" },
+  ["├"] = { "s", "s" , " ", "s" },
+  ["─"] = { " ", " " , "s", "s" },
+  ["┼"] = { "s", "s" , "s", "s" },
+  ["╞"] = { "s", "s" , " ", "d" },
+  ["╟"] = { "d", "d" , " ", "s" },
+  ["╚"] = { "d", " " , " ", "d" },
+  ["╔"] = { " ", "d" , " ", "d" },
+  ["╩"] = { "d", " " , "d", "d" },
+  ["╦"] = { " ", "d" , "d", "d" },
+  ["╠"] = { "d", "d" , " ", "d" },
+  ["═"] = { " ", " " , "d", "d" },
+  ["╬"] = { "d", "d" , "d", "d" },
+  ["╧"] = { "s", " " , "d", "d" },
+  ["╨"] = { "d", " " , "s", "s" },
+  ["╤"] = { " ", "s" , "d", "d" },
+  ["╥"] = { " ", "d" , "s", "s" },
+  ["╙"] = { "d", " " , " ", "s" },
+  ["╘"] = { "s", " " , " ", "d" },
+  ["╒"] = { " ", "s" , " ", "d" },
+  ["╓"] = { " ", "d" , " ", "s" },
+  ["╫"] = { "d", "d" , "s", "s" },
+  ["╪"] = { "s", "s" , "d", "d" },
+  ["┘"] = { "s", " " , "s", " " },
+  ["┌"] = { " ", "s" , " ", "s" },
+  ["┌"] = { " ", "s" , " ", "s" },
+  ["┍"] = { " ", "s" , " ", "b" },
+  ["┎"] = { " ", "b" , " ", "s" },
+  ["┎"] = { " ", "b" , " ", "s" },
+  ["┏"] = { " ", "b" , " ", "b" },
+  ["┑"] = { " ", "s" , "b", " " },
+  ["┒"] = { " ", "b" , "s", " " },
+  ["┓"] = { " ", "b" , "b", " " },
+  ["┕"] = { "s", " " , " ", "b" },
+  ["┖"] = { "b", " " , " ", "s" },
+  ["┗"] = { "b", " " , " ", "b" },
+  ["┙"] = { "s", " " , "b", " " },
+  ["┚"] = { "b", " " , "s", " " },
+  ["┛"] = { "b", " " , "b", " " },
+  ["┝"] = { "s", "s" , " ", "b" },
+  ["┞"] = { "b", "s" , " ", "s" },
+  ["┟"] = { "s", "b" , " ", "s" },
+  ["┠"] = { "b", "b" , " ", "s" },
+  ["┡"] = { "b", "s" , " ", "b" },
+  ["┢"] = { "s", "b" , " ", "b" },
+  ["┣"] = { "b", "b" , " ", "b" },
+  ["┥"] = { "s", "s" , "b", " " },
+  ["┦"] = { "b", "s" , "s", " " },
+  ["┧"] = { "s", "b" , "s", " " },
+  ["┨"] = { "b", "b" , "s", " " },
+  ["┩"] = { "b", "s" , "b", " " },
+  ["┪"] = { "s", "b" , "b", " " },
+  ["┫"] = { "b", "b" , "b", " " },
+  ["┭"] = { " ", "s" , "b", "s" },
+  ["┮"] = { " ", "s" , "s", "b" },
+  ["┯"] = { " ", "s" , "b", "b" },
+  ["┰"] = { " ", "b" , "s", "s" },
+  ["┱"] = { " ", "b" , "b", "s" },
+  ["┲"] = { " ", "b" , "s", "b" },
+  ["┳"] = { " ", "b" , "b", "b" },
+  ["┵"] = { "s", " " , "b", "s" },
+  ["┶"] = { "s", " " , "s", "b" },
+  ["┷"] = { "s", " " , "b", "b" },
+  ["┸"] = { "b", " " , "s", "s" },
+  ["┹"] = { "b", " " , "b", "s" },
+  ["┺"] = { "b", " " , "s", "b" },
+  ["┻"] = { "b", " " , "b", "b" },
+  ["┽"] = { "s", "s" , "b", "s" },
+  ["┾"] = { "s", "s" , "s", "b" },
+  ["┿"] = { "s", "s" , "b", "b" },
+  ["╀"] = { "b", "s" , "s", "s" },
+  ["╁"] = { "s", "b" , "s", "s" },
+  ["╂"] = { "b", "b" , "s", "s" },
+  ["╃"] = { "b", "s" , "b", "s" },
+  ["╄"] = { "b", "s" , "s", "b" },
+  ["╅"] = { "s", "b" , "b", "s" },
+  ["╆"] = { "s", "b" , "s", "b" },
+  ["╇"] = { "b", "s" , "b", "b" },
+  ["╈"] = { "s", "b" , "b", "b" },
+  ["╉"] = { "b", "b" , "b", "s" },
+  ["╊"] = { "b", "b" , "s", "b" },
+  ["╋"] = { "b", "b" , "b", "b" },
+  ["┃"] = { "b", "b" , " ", " " },
+  ["━"] = { " ", " " , "b", "b" },
+}
 local M = {}
-function M.draw_box()
+function M.draw_box(style)
   -- line is 1 indexed, col is 0 indexed 
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
@@ -78,34 +163,16 @@ function M.draw_box()
 
       local phead = lines[#lines]:sub(sbyte+1, ebyte)
 
-      if ptail == arrow_chars.left then
-        tail = line_chars.topleft
-      elseif ptail == arrow_chars.right then
-        tail = line_chars.topright
-      elseif ptail == line_chars.botleft then
-        tail = line_chars.vertright
-      elseif ptail == line_chars.botright then 
-        tail = line_chars.vertleft
-      elseif ptail == line_chars.horiup then 
-        tail = line_chars.cross
-      elseif ptail == line_chars.hori then
-        tail = line_chars.horidown
-      elseif ptail == line_chars.topright then
-        tail = line_chars.topright
-      elseif ptail == line_chars.horidown then
-        tail = line_chars.horidown
+      local ptail_opts = M.parse(ptail)
+      if ptail_opts then
+        ptail_opts[2] = style
+        tail = M.gen(ptail_opts) or tail
       end
 
-      if phead == line_chars.hori then
-        head = line_chars.horiup
-      elseif phead == line_chars.topleft then
-        head = line_chars.vertleft
-      elseif phead == line_chars.topright then
-        head = line_chars.vertright
-      elseif phead == line_chars.horidown then
-        head = line_chars.cross
-      elseif phead == line_chars.vert then
-        head = line_chars.vert
+      local phead_opts = M.parse(phead)
+      if phead_opts then
+        phead_opts[1] = style
+        head = M.gen(phead_opts) or head
       end
 
     else
@@ -119,34 +186,16 @@ function M.draw_box()
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      if ptail == arrow_chars.left then
-        tail = line_chars.botleft
-      elseif ptail == arrow_chars.right then
-        tail = line_chars.botright
-      elseif ptail == line_chars.topright then
-        tail = line_chars.vertleft
-      elseif ptail == line_chars.topleft then
-        tail = line_chars.vertright
-      elseif ptail == line_chars.horidown then
-        tail = line_chars.cross
-      elseif ptail == line_chars.hori then
-        tail = line_chars.horiup
-      elseif ptail == line_chars.botright then
-        tail = line_chars.botright
-      elseif ptail == line_chars.horiup then
-        tail = line_chars.horiup
+      local ptail_opts = M.parse(ptail)
+      if ptail_opts then
+        ptail_opts[1] = style
+        tail = M.gen(ptail_opts) or tail
       end
 
-      if phead == line_chars.hori then
-        head = line_chars.horidown
-      elseif phead == line_chars.botleft then
-        head = line_chars.vertright
-      elseif phead == line_chars.botright then
-        head = line_chars.vertleft
-      elseif phead == line_chars.horiup then
-        head = line_chars.cross
-      elseif phead == line_chars.vert then
-        head = line_chars.vert
+      local phead_opts = M.parse(phead)
+      if phead_opts then
+        phead_opts[2] = style
+        head = M.gen(phead_opts) or head
       end
 
     end
@@ -164,9 +213,9 @@ function M.draw_box()
         end
 
       elseif i == elnum-1 or i == slnum-1 then
-        c = tail or line_chars.vert
+        c = tail or M.gen({style, style, " ", " " })
       else
-        c = line_chars.vert
+        c = M.gen({style, style, " ", " " })
       end
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
     end
@@ -184,34 +233,16 @@ function M.draw_box()
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      if ptail == arrow_chars.up then
-        tail = line_chars.topleft
-      elseif ptail == arrow_chars.down then
-        tail = line_chars.botleft
-      elseif ptail == line_chars.topright then
-        tail = line_chars.horidown
-      elseif ptail == line_chars.vertleft then
-        tail = line_chars.cross
-      elseif ptail == line_chars.botright then
-        tail = line_chars.horiup
-      elseif ptail == line_chars.vert then
-        tail = line_chars.vertright
-      elseif ptail == line_chars.topleft then
-        tail = line_chars.topleft
-      elseif ptail == line_chars.vertright then
-        tail = line_chars.vertright
+      local ptail_opts = M.parse(ptail)
+      if ptail_opts then
+        ptail_opts[4] = style
+        tail = M.gen(ptail_opts) or tail
       end
 
-      if phead == line_chars.topleft then
-        head = line_chars.horidown
-      elseif phead == line_chars.botleft then
-        head = line_chars.horiup
-      elseif phead == line_chars.vert then
-        head = line_chars.vertleft
-      elseif phead == line_chars.vertright then
-        head = line_chars.cross
-      elseif phead == line_chars.hori then
-        head = line_chars.hori
+      local phead_opts = M.parse(phead)
+      if phead_opts then
+        phead_opts[3] = style
+        head = M.gen(phead_opts) or head
       end
 
     else
@@ -225,34 +256,16 @@ function M.draw_box()
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      if ptail == arrow_chars.up then
-        tail = line_chars.topright
-      elseif ptail == arrow_chars.down then
-        tail = line_chars.botright
-      elseif ptail == line_chars.topleft then
-        tail = line_chars.horidown
-      elseif ptail == line_chars.vertright then
-        tail = line_chars.cross
-      elseif ptail == line_chars.botleft then
-        tail = line_chars.horiup
-      elseif ptail == line_chars.vert then
-        tail = line_chars.vertleft
-      elseif ptail == line_chars.topright then
-        tail = line_chars.topright
-      elseif ptail == line_chars.vertleft then
-        tail = line_chars.vertleft
+      local ptail_opts = M.parse(ptail)
+      if tail_opts then
+        ptail_opts[3] = style
+        tail = M.gen(ptail_opts) or tail
       end
 
-      if phead == line_chars.topright then
-        head = line_chars.horidown
-      elseif phead == line_chars.botright then
-        head = line_chars.horiup
-      elseif phead == line_chars.vert then
-        head = line_chars.vertright
-      elseif phead == line_chars.vertleft then
-        head = line_chars.cross
-      elseif phead == line_chars.hori then
-        head = line_chars.hori
+      local phead_opts = M.parse(phead)
+      if phead_opts then
+        phead_opts[4] = style
+        head = M.gen(phead_opts) or head
       end
 
     end
@@ -268,9 +281,9 @@ function M.draw_box()
         end
 
       elseif i == scol or i == ecol then
-        c = tail or line_chars.hori
+        c = tail or M.gen({" ", " ", style, style })
       else
-        c = line_chars.hori
+        c = M.gen({" ", " ", style, style })
       end
       line = line .. c
     end
@@ -283,13 +296,13 @@ function M.draw_box()
     local topborder = ""
     for i=scol,ecol do
       if i == scol then
-        topborder = topborder .. box_chars.topleft
+        topborder = topborder .. M.gen({" ", style, " ", style})
 
       elseif i == ecol then
-        topborder = topborder .. box_chars.topright
+        topborder = topborder .. M.gen({" ", style, style, " " })
 
       else
-        topborder = topborder .. box_chars.top
+        topborder = topborder .. M.gen({" ", " ", style, style })
 
       end
     end
@@ -300,13 +313,13 @@ function M.draw_box()
     local botborder = ""
     for i=scol,ecol do
       if i == scol then
-        botborder = botborder .. box_chars.botleft
+        botborder = botborder .. M.gen({style, " ", " ", style })
 
       elseif i == ecol then
-        botborder = botborder .. box_chars.botright
+        botborder = botborder .. M.gen({style, " ", style, " " })
 
       else
-        botborder = botborder .. box_chars.bot
+        botborder = botborder .. M.gen({" ", " ", style, style })
 
       end
     end
@@ -319,12 +332,12 @@ function M.draw_box()
       local len = string.len(lines[i-slnum+2])
       local sbyte = M.get_bytes(lines[i-slnum+2], scol)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
-      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { box_chars.left })
+      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen({style, style, " ", " " }) })
       lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 
       local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
       local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
-      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { box_chars.right })
+      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
 
     end
 
@@ -358,16 +371,15 @@ function M.get_bytes(line, col)
   return string.len(line)
 end
 
-function M.set_box_chars(borders)
-  box_chars = borders
+function M.gen(opts)
+  for c, opt in pairs(charset) do
+    if opt[1] == opts[1] and opt[2] == opts[2] and opt[3] == opts[3] and opt[4] == opts[4] then
+      return c
+    end
+  end
 end
-
-function M.set_line_chars(chars)
-  line_chars = chars
-end
-
-function M.set_arrow_chars(chars)
-  arrow_chars = chars
+function M.parse(sym)
+  return vim.deepcopy(charset[sym])
 end
 
 return M

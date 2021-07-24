@@ -4,8 +4,10 @@ VENN *venn*
                 by jbyuki~
 
 
-venn offers utilities to easily draw ASCII diagrams which
-would be difficult to do by hand.
+venn offers utilities to draw simply ASCII diagrams using
+the box-drawing character.
+
+https://en.wikipedia.org/wiki/Box-drawing_character
 
                   Type |gO| to see the table of contents.
 
@@ -49,8 +51,10 @@ COMMANDS
 
                                                 *:VBox*
 :VBox                     
-                Draw a single line border where the visual
-                block area was selected. If the width or
-                height is 1, draw an arrow instead.
+                Draw a single line box or arrow
+
+:VBoxD          Draw a double line box or arrow
+
+:VBoxH          Draw a heavy line box or arrow
 
  vim:tw=60:ts=8:ft=help:norl:
