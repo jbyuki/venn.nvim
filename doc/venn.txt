@@ -4,8 +4,8 @@ VENN *venn*
                 by jbyuki~
 
 
-venn offers utilities to draw simply ASCII diagrams using
-the box-drawing character.
+venn offers utilities to simply draw ASCII diagrams using
+the box-drawing characters.
 
 https://en.wikipedia.org/wiki/Box-drawing_character
 
@@ -41,8 +41,8 @@ the possibilities offered by the plug-in.
 
 USAGE
 
-1. `set virtualedit=all` or `set ve=all`. This will allow
-you to freely move the cursor in the buffer. (see
+1. `set virtualedit=all` or `set ve=all` . This allows to
+freely move the cursor inside the buffer. (see
 |virtualedit|).
 
 2. Enter in Visual Block mode using <C-v>. Select the
@@ -78,9 +78,9 @@ COMMANDS
 
                                                 *:VBoxO*
 :VBoxO                     
-                Draw a single line box or arrow. Instead
-                of replacing intermediate characters it
-                try to give the impression to draw over.
+                Draw a single line box or arrow. It tries
+                to give the impression the box is drawn
+                over existing characters.
 
     With |:VBox|:
 
