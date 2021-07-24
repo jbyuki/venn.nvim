@@ -1,7 +1,8 @@
 ##../venn
 @implement+=
 function M.parse(sym)
-  return vim.deepcopy(charset[sym])
+  local opts = charset[sym] or arrows[sym]
+  return vim.deepcopy(opts)
 end
 
 @script_variables+=
@@ -50,7 +51,6 @@ local charset = {
   ["╫"] = { "d", "d" , "s", "s" },
   ["╪"] = { "s", "s" , "d", "d" },
   ["┘"] = { "s", " " , "s", " " },
-  ["┌"] = { " ", "s" , " ", "s" },
   ["┌"] = { " ", "s" , " ", "s" },
   ["┍"] = { " ", "s" , " ", "b" },
   ["┎"] = { " ", "b" , " ", "s" },
@@ -110,4 +110,12 @@ local charset = {
   ["╋"] = { "b", "b" , "b", "b" },
   ["┃"] = { "b", "b" , " ", " " },
   ["━"] = { " ", " " , "b", "b" },
+  ["━"] = { " ", " " , "b", "b" },
+}
+
+local arrows = {
+  ["▲"] = { " ", "s" , " ", " " },
+  ["▼"] = { "s", " " , " ", " " },
+  ["◄"] = { " ", " " , " ", "s" },
+  ["►"] = { " ", " " , "s", " " },
 }

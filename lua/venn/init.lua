@@ -49,7 +49,6 @@ local charset = {
   ["╪"] = { "s", "s" , "d", "d" },
   ["┘"] = { "s", " " , "s", " " },
   ["┌"] = { " ", "s" , " ", "s" },
-  ["┌"] = { " ", "s" , " ", "s" },
   ["┍"] = { " ", "s" , " ", "b" },
   ["┎"] = { " ", "b" , " ", "s" },
   ["┎"] = { " ", "b" , " ", "s" },
@@ -108,6 +107,14 @@ local charset = {
   ["╋"] = { "b", "b" , "b", "b" },
   ["┃"] = { "b", "b" , " ", " " },
   ["━"] = { " ", " " , "b", "b" },
+  ["━"] = { " ", " " , "b", "b" },
+}
+
+local arrows = {
+  ["▲"] = { " ", "s" , " ", " " },
+  ["▼"] = { "s", " " , " ", " " },
+  ["◄"] = { " ", " " , " ", "s" },
+  ["►"] = { " ", " " , "s", " " },
 }
 local M = {}
 function M.draw_box(style)
@@ -257,7 +264,7 @@ function M.draw_box(style)
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
       local ptail_opts = M.parse(ptail)
-      if tail_opts then
+      if ptail_opts then
         ptail_opts[3] = style
         tail = M.gen(ptail_opts) or tail
       end
@@ -371,7 +378,7 @@ function M.get_bytes(line, col)
   return string.len(line)
 end
 
-function draw_box_over()
+function M.draw_box_over()
 end
 function M.gen(opts)
   for c, opt in pairs(charset) do
@@ -381,7 +388,8 @@ function M.gen(opts)
   end
 end
 function M.parse(sym)
-  return vim.deepcopy(charset[sym])
+  local opts = charset[sym] or arrows[sym]
+  return vim.deepcopy(opts)
 end
 
 return M

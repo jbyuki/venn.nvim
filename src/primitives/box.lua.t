@@ -300,7 +300,7 @@ end
 
 @connect_line_going_left+=
 local ptail_opts = M.parse(ptail)
-if tail_opts then
+if ptail_opts then
   ptail_opts[3] = style
   tail = M.gen(ptail_opts) or tail
 end

@@ -1,4 +1,4 @@
 ##../venn
 @implement+=
-function draw_box_over()
+function M.draw_box_over()
 end
