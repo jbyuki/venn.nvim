@@ -1,0 +1,56 @@
+VENN *venn*
+
+            VENN REFERENCE MANUAL~
+                by jbyuki~
+
+
+venn offers utilities to easily draw ASCII diagrams which
+would be difficult to do by hand.
+
+                  Type |gO| to see the table of contents.
+
+======================================================
+
+EXAMPLES
+
+The following diagrams were all drawn using venn. This shows
+the possibilities offered by the plug-in. 
+
+>
+  If some characters are not displayed correctly make sure
+  to install a font which supports Unicode special box
+  characters
+<
+                                                ┌───┐
+                                                └───┘
+        ┌─┐  ┌─┐           ┌──────┐          ┌─┐  ▲  ┌─┐
+        │a├─►│b│           │ loop │◄┐        │ │◄─┼─►│ │
+        └─┘  └─┘           └────┬─┘ │        └─┘  ▼  └─┘
+                                └───┘           ┌───┐
+                                                └───┘
+
+======================================================
+
+USAGE
+
+1. `set virtualedit=all` or `set ve=all`. This will allow
+you to freely move the cursor in the buffer. (see help
+|virtualedit|).
+
+2. Enter in Visual Block mode using <C-v>. Select the region
+where the box should be.
+
+3. Invoke |:VBox|. This will draw a rectangle. In case, it has
+a width or a height of 1, it will draw a line.
+
+======================================================
+
+COMMANDS
+
+                                                *:VBox*
+:VBox                     
+                Draw a single line border where the visual
+                block area was selected. If the width or
+                height is 1, draw an arrow instead.
+
+ vim:tw=60:ts=8:ft=help:norl:
