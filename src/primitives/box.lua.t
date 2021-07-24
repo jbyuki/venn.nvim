@@ -289,6 +289,8 @@ elseif ptail == line_chars.horiup then
   tail = line_chars.cross
 elseif ptail == line_chars.hori then
   tail = line_chars.horidown
+elseif ptail == line_chars.topright then
+  tail = line_chars.topright
 end
 
 @connect_line_going_up+=
@@ -304,6 +306,8 @@ elseif ptail == line_chars.horidown then
   tail = line_chars.cross
 elseif ptail == line_chars.hori then
   tail = line_chars.horiup
+elseif ptail == line_chars.botright then
+  tail = line_chars.botright
 end
 
 @connect_line_if_possible_horizontal+=
@@ -357,6 +361,8 @@ elseif ptail == line_chars.botright then
   tail = line_chars.horiup
 elseif ptail == line_chars.vert then
   tail = line_chars.vertright
+elseif ptail == line_chars.topleft then
+  tail = line_chars.topleft
 end
 
 @line_chars+=
@@ -375,6 +381,8 @@ elseif ptail == line_chars.botleft then
   tail = line_chars.horiup
 elseif ptail == line_chars.vert then
   tail = line_chars.vertleft
+elseif ptail == line_chars.topright then
+  tail = line_chars.topright
 end
 
 @connect_line_going_right+=
