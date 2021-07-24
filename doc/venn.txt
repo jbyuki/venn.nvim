@@ -36,14 +36,23 @@ the possibilities offered by the plug-in.
 USAGE
 
 1. `set virtualedit=all` or `set ve=all`. This will allow
-you to freely move the cursor in the buffer. (see help
+you to freely move the cursor in the buffer. (see
 |virtualedit|).
 
-2. Enter in Visual Block mode using <C-v>. Select the region
-where the box should be.
+2. Enter in Visual Block mode using <C-v>. Select the
+region where the box should be.
 
-3. Invoke |:VBox|. This will draw a rectangle. In case, it has
-a width or a height of 1, it will draw a line.
+3. Invoke |:VBox|. This will draw a rectangle. In case, it
+has a width or a height of 1, it will draw a line.
+
+Notes:
+
+To avoid switching to |virtualedit| everytime a text file is
+opened, please use a vim directive. For example:
+>
+  vim:ve=all:
+<
+This should be the last line of the text file.
 
 ======================================================
 
@@ -51,10 +60,24 @@ COMMANDS
 
                                                 *:VBox*
 :VBox                     
-                Draw a single line box or arrow
+                Draw a single line box or arrow.
 
-:VBoxD          Draw a double line box or arrow
+:VBoxD          
+                Draw a double line box or arrow.
 
-:VBoxH          Draw a heavy line box or arrow
+:VBoxH          
+                Draw a heavy line box or arrow.
 
- vim:tw=60:ts=8:ft=help:norl:
+:VBoxO                     
+                Draw a single line box or arrow. Instead
+                of replacing intermediate characters it
+                try to give the impression to draw over.
+
+:VBoxDO          
+                Draw a double line box or arrow. Draw
+                over.
+
+:VBoxHO          
+                Draw a heavy line box or arrow. Draw over.
+
+ vim:tw=58:ts=8:ft=help:norl:
