@@ -596,6 +596,55 @@ function M.draw_box_over(style)
   vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
 end
 
+function M.fill_box()
+  -- line is 1 indexed, col is 0 indexed 
+  local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
+  local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
+
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+  local scol = M.get_width(lines[1], sbyte-1) + vscol
+  local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
+
+  if scol > ecol then
+    scol, ecol = ecol, scol
+  end
+
+  local w = ecol - scol + 1
+  local h = elnum - slnum + 1
+
+
+  for i=1,#lines do
+    local len = M.get_width(lines[i])
+    local diff = ecol - len + 1
+    if diff > 0 then
+      local extend = ""
+      for _=1,diff do
+        extend = extend .. " "
+      end
+      local eol = string.len(lines[i])
+      vim.api.nvim_buf_set_text(0, slnum-1+(i-1), eol, slnum-1+(i-1), eol, { extend })
+      lines[i] = lines[i] .. extend
+
+    end
+  end
+
+
+  local fill_char = '█'
+  for i=slnum-1,elnum-1 do
+    local len = string.len(lines[i-slnum+2])
+
+    local sbyte = M.get_bytes(lines[i-slnum+2], scol)
+    local ebyte = M.get_bytes(lines[i-slnum+2], ecol+1)
+
+    local line = ""
+    for i=scol,ecol do
+      line = line .. fill_char
+    end
+
+    vim.api.nvim_buf_set_text(0, i, sbyte, i, ebyte, { line })
+  end
+end
+
 function M.gen(opts)
   for c, opt in pairs(charset) do
     if opt[1] == opts[1] and opt[2] == opts[2] and opt[3] == opts[3] and opt[4] == opts[4] then

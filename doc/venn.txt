@@ -31,6 +31,12 @@ the possibilities offered by the plug-in.
                                 └───┘           ┌───┐
                                                 └───┘
 
+                                    ┌────┐╔══════╗┌───┐
+        ╔═╗     ┏━┓    ┌─┐          │████│║ venn ║│ v │
+        ║ ╟────►┃ ┠───►│ ├──►       │████│╚══════╝│ i │
+        ╚═╝     ┗━┛    └─┘          │████│┌──────┐│ m │
+                                    └────┘└──────┘└───┘
+
 ======================================================
 
 USAGE
@@ -50,7 +56,7 @@ Notes:
 To avoid switching to |virtualedit| everytime a text file is
 opened, please use a vim directive. For example:
 >
-  vim:ve=all:
+  vim:ve=all:cursorcolumn:cursorline:
 <
 This should be the last line of the text file.
 
@@ -62,22 +68,45 @@ COMMANDS
 :VBox                     
                 Draw a single line box or arrow.
 
+                                                *:VBoxD*
 :VBoxD          
                 Draw a double line box or arrow.
 
+                                                *:VBoxH*
 :VBoxH          
                 Draw a heavy line box or arrow.
 
+                                                *:VBoxO*
 :VBoxO                     
                 Draw a single line box or arrow. Instead
                 of replacing intermediate characters it
                 try to give the impression to draw over.
 
+    With |:VBox|:
+
+         ┌───┐
+         │ ┌───┐
+         └─│─┘ │
+           └───┘
+
+    With |:VBoxO|:
+
+         ┌───┐
+         │ ┌─┼─┐
+         └─┼─┘ │
+           └───┘
+
+                                                *:VBoxDO*
 :VBoxDO          
                 Draw a double line box or arrow. Draw
                 over.
 
+                                                *:VBoxHO*
 :VBoxHO          
                 Draw a heavy line box or arrow. Draw over.
+
+                                                *:VFill*
+:VFill          
+                Fill the area with a solid color.
 
  vim:tw=58:ts=8:ft=help:norl:
