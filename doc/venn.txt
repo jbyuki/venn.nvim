@@ -54,7 +54,7 @@ has a width or a height of 1, it will draw a line.
 Notes:
 
 To avoid switching to |virtualedit| everytime a text file is
-opened, please use a vim directive. For example:
+opened, please use a vim |modeline|. For example:
 >
   vim:ve=all:cursorcolumn:cursorline:
 <
