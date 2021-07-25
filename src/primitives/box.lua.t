@@ -55,11 +55,11 @@ M.log("box dimensions " .. vim.inspect({w, h}))
 
 @restore_visual_select+=
 M.log("restore visual select")
-vim.api.nvim_command [[normal gv]]
+vim.api.nvim_command [[normal! gv]]
 
 @restore_normal+=
 M.log("restore normal")
-vim.api.nvim_command [[normal vv]]
+vim.api.nvim_command [[normal! vv]]
 
 @get_cursor_position+=
 local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))

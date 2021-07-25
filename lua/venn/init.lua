@@ -155,13 +155,13 @@ function M.draw_box(style)
 
 
   M.log("restore visual select")
-  vim.api.nvim_command [[normal gv]]
+  vim.api.nvim_command [[normal! gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
   local ccol = M.get_width(lines[1], cbyte-1) + vccol
 
   M.log("restore normal")
-  vim.api.nvim_command [[normal vv]]
+  vim.api.nvim_command [[normal! vv]]
 
 
   M.log("append whitespaces")
@@ -425,13 +425,13 @@ function M.draw_box_over(style)
 
 
   M.log("restore visual select")
-  vim.api.nvim_command [[normal gv]]
+  vim.api.nvim_command [[normal! gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
   local ccol = M.get_width(lines[1], cbyte-1) + vccol
 
   M.log("restore normal")
-  vim.api.nvim_command [[normal vv]]
+  vim.api.nvim_command [[normal! vv]]
 
 
   M.log("append whitespaces")
