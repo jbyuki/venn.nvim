@@ -1,4 +1,10 @@
 -- Generated using ntangle.nvim
+local log_filename
+if vim.g.venn_debug then
+  log_filename = vim.fn.stdpath("data") .. "/venn.log"
+
+end
+
 local arrow_chars = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
@@ -117,6 +123,18 @@ local arrows = {
   ["►"] = { " ", " " , "s", " " },
 }
 local M = {}
+function M.log(str)
+  if log_filename then
+    local f = io.open(log_filename, "a")
+
+    if f then
+      f:write(str .. "\n")
+
+      f:close()
+    end
+  end
+end
+
 function M.draw_box(style)
   -- line is 1 indexed, col is 0 indexed 
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
@@ -133,15 +151,20 @@ function M.draw_box(style)
   local w = ecol - scol + 1
   local h = elnum - slnum + 1
 
+  M.log("box dimensions " .. vim.inspect({w, h}))
 
+
+  M.log("restore visual select")
   vim.api.nvim_command [[normal gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
   local ccol = M.get_width(lines[1], cbyte-1) + vccol
 
+  M.log("restore normal")
   vim.api.nvim_command [[normal vv]]
 
 
+  M.log("append whitespaces")
   for i=1,#lines do
     local len = M.get_width(lines[i])
     local diff = ecol - len + 1
@@ -300,6 +323,7 @@ function M.draw_box(style)
     vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
   else
+    M.log("draw box top")
     local topborder = ""
     for i=scol,ecol do
       if i == scol then
@@ -317,6 +341,7 @@ function M.draw_box(style)
     local ebyte = M.get_bytes(lines[1], ecol+1)
     vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { topborder })
 
+    M.log("draw box bot")
     local botborder = ""
     for i=scol,ecol do
       if i == scol then
@@ -335,6 +360,7 @@ function M.draw_box(style)
     local ebyte = M.get_bytes(lines[#lines], ecol+1)
     vim.api.nvim_buf_set_text(0, elnum-1, sbyte, elnum-1, ebyte, { botborder })
 
+    M.log("draw box left right")
     for i=slnum,elnum-2 do
       local len = string.len(lines[i-slnum+2])
       local sbyte = M.get_bytes(lines[i-slnum+2], scol)
@@ -350,6 +376,7 @@ function M.draw_box(style)
 
   end
 
+  M.log("restore cursor position")
   local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
   local sbyte
   sbyte = M.get_bytes(line, ccol)
@@ -394,15 +421,20 @@ function M.draw_box_over(style)
   local w = ecol - scol + 1
   local h = elnum - slnum + 1
 
+  M.log("box dimensions " .. vim.inspect({w, h}))
 
+
+  M.log("restore visual select")
   vim.api.nvim_command [[normal gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
   local ccol = M.get_width(lines[1], cbyte-1) + vccol
 
+  M.log("restore normal")
   vim.api.nvim_command [[normal vv]]
 
 
+  M.log("append whitespaces")
   for i=1,#lines do
     local len = M.get_width(lines[i])
     local diff = ecol - len + 1
@@ -590,6 +622,7 @@ function M.draw_box_over(style)
 
   end
 
+  M.log("restore cursor position")
   local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
   local sbyte
   sbyte = M.get_bytes(line, ccol)
@@ -612,7 +645,10 @@ function M.fill_box()
   local w = ecol - scol + 1
   local h = elnum - slnum + 1
 
+  M.log("box dimensions " .. vim.inspect({w, h}))
 
+
+  M.log("append whitespaces")
   for i=1,#lines do
     local len = M.get_width(lines[i])
     local diff = ecol - len + 1

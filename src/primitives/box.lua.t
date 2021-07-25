@@ -51,10 +51,14 @@ end
 local w = ecol - scol + 1
 local h = elnum - slnum + 1
 
+M.log("box dimensions " .. vim.inspect({w, h}))
+
 @restore_visual_select+=
+M.log("restore visual select")
 vim.api.nvim_command [[normal gv]]
 
 @restore_normal+=
+M.log("restore normal")
 vim.api.nvim_command [[normal vv]]
 
 @get_cursor_position+=
@@ -62,6 +66,7 @@ local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
 local ccol = M.get_width(lines[1], cbyte-1) + vccol
 
 @append_whitespace_if_outside+=
+M.log("append whitespaces")
 for i=1,#lines do
   local len = M.get_width(lines[i])
   local diff = ecol - len + 1
@@ -94,6 +99,7 @@ function M.get_bytes(line, col)
 end
 
 @draw_over_box_top+=
+M.log("draw box top")
 local topborder = ""
 for i=scol,ecol do
   if i == scol then
@@ -118,6 +124,7 @@ topborder = topborder .. M.gen({" ", style, style, " " })
 topborder = topborder .. M.gen({" ", " ", style, style })
 
 @draw_over_box_bottom+=
+M.log("draw box bot")
 local botborder = ""
 for i=scol,ecol do
   if i == scol then
@@ -143,6 +150,7 @@ botborder = botborder .. M.gen({style, " ", style, " " })
 botborder = botborder .. M.gen({" ", " ", style, style })
 
 @draw_over_box_left_right+=
+M.log("draw box left right")
 for i=slnum,elnum-2 do
   @draw_left_border
   @draw_right_border
@@ -334,6 +342,7 @@ if phead_opts then
 end
 
 @restore_cursor_position+=
+M.log("restore cursor position")
 local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
 local sbyte
 sbyte = M.get_bytes(line, ccol)
