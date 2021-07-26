@@ -358,15 +358,14 @@ local ebyte = M.get_bytes(lines[#lines], ecol)
 
 vim.api.nvim_win_set_cursor(0, { slnum, sbyte+1 })
 
--- local hori_mvt = ""
--- if w-1 > 0 then
-  -- hori_mvt = (w-1) .. "l"
--- end
+local hori_mvt = ""
+if w-1 > 0 then
+  hori_mvt = (w-1) .. "l"
+end
 
--- local vert_mvt = ""
--- if h-1 > 0 then
-  -- vert_mvt = (h-1) .. "j"
--- end
+local vert_mvt = ""
+if h-1 > 0 then
+  vert_mvt = (h-1) .. "j"
+end
 
--- local key = vim.api.nvim_replace_termcodes("<C-v>" .. hori_mvt .. vert_mvt .. "<esc>", true, false, true)
--- vim.api.nvim_feedkeys(key, 'n', true)
+vim.cmd([[exe "norm! \<C-V>]] .. hori_mvt .. vert_mvt .. [[\<esc>"]])
