@@ -376,11 +376,27 @@ function M.draw_box(style)
 
   end
 
-  M.log("restore cursor position")
-  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
-  local sbyte
-  sbyte = M.get_bytes(line, ccol)
-  vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
+  M.log("restore visual selection")
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+
+  local sbyte = M.get_bytes(lines[1], scol)
+  local ebyte = M.get_bytes(lines[#lines], ecol)
+
+  vim.api.nvim_win_set_cursor(0, { slnum, sbyte+1 })
+
+  local hori_mvt = ""
+  if w-1 > 0 then
+    hori_mvt = (w-1) .. "l"
+  end
+
+  local vert_mvt = ""
+  if h-1 > 0 then
+    vert_mvt = (h-1) .. "j"
+  end
+
+  local key = vim.api.nvim_replace_termcodes("<C-v>" .. hori_mvt .. vert_mvt .. "<esc>", true, false, true)
+  vim.api.nvim_feedkeys(key, 'n', true)
+  -- @restore_cursor_position
 end
 
 function M.get_width(line, byte)
@@ -623,10 +639,11 @@ function M.draw_box_over(style)
   end
 
   M.log("restore cursor position")
-  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
-  local sbyte
-  sbyte = M.get_bytes(line, ccol)
-  vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
+  -- local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  -- local sbyte
+  -- sbyte = M.get_bytes(line, ccol)
+  -- vim.fn.setpos('.', { 0, clnum, sbyte+1, 0 })
+
 end
 
 function M.fill_box()
