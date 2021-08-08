@@ -19,7 +19,8 @@ function M.draw_box_over(style)
     @draw_over_box_left_right_over
   end
 
-  @restore_cursor_position
+  @restore_visual_selection
+  -- @restore_cursor_position
 end
 
 @draw_over_box_top_over+=
