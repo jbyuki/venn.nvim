@@ -20,7 +20,7 @@ function M.draw_box_over(style)
   end
 
   @restore_visual_selection
-  -- @restore_cursor_position
+  @restore_cursor_position
 end
 
 @draw_over_box_top_over+=

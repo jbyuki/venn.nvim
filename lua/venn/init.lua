@@ -158,7 +158,8 @@ function M.draw_box(style)
   vim.api.nvim_command [[normal! gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
-  local ccol = M.get_width(lines[1], cbyte-1) + vccol
+  local cline = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
+  local ccol = M.get_width(cline, cbyte-1) + vccol
 
   M.log("restore normal")
   vim.api.nvim_command [[normal! vv]]
@@ -395,7 +396,12 @@ function M.draw_box(style)
   end
 
   vim.cmd([[exe "norm! \<C-V>]] .. hori_mvt .. vert_mvt .. [[\<esc>"]])
-  -- @restore_cursor_position
+  M.log("restore cursor position")
+
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local sbyte = M.get_bytes(line, ccol)
+  vim.api.nvim_win_set_cursor(0, {clnum, sbyte+1})
+
 end
 
 function M.get_width(line, byte)
@@ -443,7 +449,8 @@ function M.draw_box_over(style)
   vim.api.nvim_command [[normal! gv]]
 
   local  _,clnum,cbyte,vccol = unpack(vim.fn.getpos('.'))
-  local ccol = M.get_width(lines[1], cbyte-1) + vccol
+  local cline = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
+  local ccol = M.get_width(cline, cbyte-1) + vccol
 
   M.log("restore normal")
   vim.api.nvim_command [[normal! vv]]
@@ -656,7 +663,12 @@ function M.draw_box_over(style)
   end
 
   vim.cmd([[exe "norm! \<C-V>]] .. hori_mvt .. vert_mvt .. [[\<esc>"]])
-  -- @restore_cursor_position
+  M.log("restore cursor position")
+
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local sbyte = M.get_bytes(line, ccol)
+  vim.api.nvim_win_set_cursor(0, {clnum, sbyte+1})
+
 end
 
 function M.fill_box()
