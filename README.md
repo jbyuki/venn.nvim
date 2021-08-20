@@ -28,3 +28,19 @@ Usage
 * Enter in Visual Block mode using `<C-v>`. Select the region where the box should be.
 
 * Invoke `:VBox`. This will draw a rectangle. In case, it has a width or a height of 1, it will draw a line.
+
+Key Mapping
+-----------
+
+In a lua function:
+
+```lua
+vim.cmd[[setlocal ve=all]]
+vim.api.nvim_buf_set_keymap(0, "n", "J", "<C-v>j:VBox<cr>", {noremap = true})
+vim.api.nvim_buf_set_keymap(0, "n", "K", "<C-v>k:VBox<cr>", {noremap = true})
+vim.api.nvim_buf_set_keymap(0, "n", "L", "<C-v>l:VBox<cr>", {noremap = true})
+vim.api.nvim_buf_set_keymap(0, "n", "H", "<C-v>h:VBox<cr>", {noremap = true})
+vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<cr>", {noremap = true})
+```
+![veenDemo](https://user-images.githubusercontent.com/36175703/130246504-d559f66b-3e2a-4065-90f7-d73bf8147397.gif)
+
