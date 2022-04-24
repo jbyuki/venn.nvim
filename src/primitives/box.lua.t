@@ -348,7 +348,7 @@ M.log("restore cursor position")
 
 local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
 local sbyte = M.get_bytes(line, ccol)
-vim.api.nvim_win_set_cursor(0, {clnum, sbyte+1})
+vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
 @restore_visual_selection+=
 M.log("restore visual selection")

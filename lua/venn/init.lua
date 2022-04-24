@@ -10,117 +10,110 @@ local arrow_chars = {
 }
 
 local charset = {
-  --      { up , down, left, right }
+  -- [ up down left right ] = char
   --      s : single
   --      d : double
   --      b : bold
-  [" "] = { " ", " " , " ", " " },
-  ["│"] = { "s", "s" , " ", " " },
-  ["┤"] = { "s", "s" , "s", " " },
-  ["╡"] = { "s", "s" , "d", " " },
-  ["╢"] = { "d", "d" , "s", " " },
-  ["╖"] = { " ", "d" , "s", " " },
-  ["╕"] = { " ", "s" , "d", " " },
-  ["╣"] = { "d", "d" , "d", " " },
-  ["║"] = { "d", "d" , " ", " " },
-  ["╗"] = { " ", "d" , "d", " " },
-  ["╝"] = { "d", " " , "d", " " },
-  ["╜"] = { "d", " " , "s", " " },
-  ["╛"] = { "s", " " , "d", " " },
-  ["┐"] = { " ", "s" , "s", " " },
-  ["└"] = { "s", " " , " ", "s" },
-  ["┴"] = { "s", " " , "s", "s" },
-  ["┬"] = { " ", "s" , "s", "s" },
-  ["├"] = { "s", "s" , " ", "s" },
-  ["─"] = { " ", " " , "s", "s" },
-  ["┼"] = { "s", "s" , "s", "s" },
-  ["╞"] = { "s", "s" , " ", "d" },
-  ["╟"] = { "d", "d" , " ", "s" },
-  ["╚"] = { "d", " " , " ", "d" },
-  ["╔"] = { " ", "d" , " ", "d" },
-  ["╩"] = { "d", " " , "d", "d" },
-  ["╦"] = { " ", "d" , "d", "d" },
-  ["╠"] = { "d", "d" , " ", "d" },
-  ["═"] = { " ", " " , "d", "d" },
-  ["╬"] = { "d", "d" , "d", "d" },
-  ["╧"] = { "s", " " , "d", "d" },
-  ["╨"] = { "d", " " , "s", "s" },
-  ["╤"] = { " ", "s" , "d", "d" },
-  ["╥"] = { " ", "d" , "s", "s" },
-  ["╙"] = { "d", " " , " ", "s" },
-  ["╘"] = { "s", " " , " ", "d" },
-  ["╒"] = { " ", "s" , " ", "d" },
-  ["╓"] = { " ", "d" , " ", "s" },
-  ["╫"] = { "d", "d" , "s", "s" },
-  ["╪"] = { "s", "s" , "d", "d" },
-  ["┘"] = { "s", " " , "s", " " },
-  ["┌"] = { " ", "s" , " ", "s" },
-  ["┍"] = { " ", "s" , " ", "b" },
-  ["┎"] = { " ", "b" , " ", "s" },
-  ["┎"] = { " ", "b" , " ", "s" },
-  ["┏"] = { " ", "b" , " ", "b" },
-  ["┑"] = { " ", "s" , "b", " " },
-  ["┒"] = { " ", "b" , "s", " " },
-  ["┓"] = { " ", "b" , "b", " " },
-  ["┕"] = { "s", " " , " ", "b" },
-  ["┖"] = { "b", " " , " ", "s" },
-  ["┗"] = { "b", " " , " ", "b" },
-  ["┙"] = { "s", " " , "b", " " },
-  ["┚"] = { "b", " " , "s", " " },
-  ["┛"] = { "b", " " , "b", " " },
-  ["┝"] = { "s", "s" , " ", "b" },
-  ["┞"] = { "b", "s" , " ", "s" },
-  ["┟"] = { "s", "b" , " ", "s" },
-  ["┠"] = { "b", "b" , " ", "s" },
-  ["┡"] = { "b", "s" , " ", "b" },
-  ["┢"] = { "s", "b" , " ", "b" },
-  ["┣"] = { "b", "b" , " ", "b" },
-  ["┥"] = { "s", "s" , "b", " " },
-  ["┦"] = { "b", "s" , "s", " " },
-  ["┧"] = { "s", "b" , "s", " " },
-  ["┨"] = { "b", "b" , "s", " " },
-  ["┩"] = { "b", "s" , "b", " " },
-  ["┪"] = { "s", "b" , "b", " " },
-  ["┫"] = { "b", "b" , "b", " " },
-  ["┭"] = { " ", "s" , "b", "s" },
-  ["┮"] = { " ", "s" , "s", "b" },
-  ["┯"] = { " ", "s" , "b", "b" },
-  ["┰"] = { " ", "b" , "s", "s" },
-  ["┱"] = { " ", "b" , "b", "s" },
-  ["┲"] = { " ", "b" , "s", "b" },
-  ["┳"] = { " ", "b" , "b", "b" },
-  ["┵"] = { "s", " " , "b", "s" },
-  ["┶"] = { "s", " " , "s", "b" },
-  ["┷"] = { "s", " " , "b", "b" },
-  ["┸"] = { "b", " " , "s", "s" },
-  ["┹"] = { "b", " " , "b", "s" },
-  ["┺"] = { "b", " " , "s", "b" },
-  ["┻"] = { "b", " " , "b", "b" },
-  ["┽"] = { "s", "s" , "b", "s" },
-  ["┾"] = { "s", "s" , "s", "b" },
-  ["┿"] = { "s", "s" , "b", "b" },
-  ["╀"] = { "b", "s" , "s", "s" },
-  ["╁"] = { "s", "b" , "s", "s" },
-  ["╂"] = { "b", "b" , "s", "s" },
-  ["╃"] = { "b", "s" , "b", "s" },
-  ["╄"] = { "b", "s" , "s", "b" },
-  ["╅"] = { "s", "b" , "b", "s" },
-  ["╆"] = { "s", "b" , "s", "b" },
-  ["╇"] = { "b", "s" , "b", "b" },
-  ["╈"] = { "s", "b" , "b", "b" },
-  ["╉"] = { "b", "b" , "b", "s" },
-  ["╊"] = { "b", "b" , "s", "b" },
-  ["╋"] = { "b", "b" , "b", "b" },
-  ["┃"] = { "b", "b" , " ", " " },
-  ["━"] = { " ", " " , "b", "b" },
-  ["━"] = { " ", " " , "b", "b" },
-}
-
-local arrows = {
-  ["▲"] = { " ", "s" , " ", " " },
-  ["▼"] = { "s", " " , " ", " " },
-  ["◄"] = { " ", " " , " ", "s" },
-  ["►"] = { " ", " " , "s", " " },
+  ["    "] = " ",
+  ["ss  "] = "│",
+  ["sss "] = "┤",
+  ["ssd "] = "╡",
+  ["dds "] = "╢",
+  [" ds "] = "╖",
+  [" sd "] = "╕",
+  ["ddd "] = "╣",
+  ["dd  "] = "║",
+  [" dd "] = "╗",
+  ["d d "] = "╝",
+  ["d s "] = "╜",
+  ["s d "] = "╛",
+  [" ss "] = "┐",
+  ["s  s"] = "└",
+  ["s ss"] = "┴",
+  [" sss"] = "┬",
+  ["ss s"] = "├",
+  ["  ss"] = "─",
+  ["ssss"] = "┼",
+  ["ss d"] = "╞",
+  ["dd s"] = "╟",
+  ["d  d"] = "╚",
+  [" d d"] = "╔",
+  ["d dd"] = "╩",
+  [" ddd"] = "╦",
+  ["dd d"] = "╠",
+  ["  dd"] = "═",
+  ["dddd"] = "╬",
+  ["s dd"] = "╧",
+  ["d ss"] = "╨",
+  [" sdd"] = "╤",
+  [" dss"] = "╥",
+  ["d  s"] = "╙",
+  ["s  d"] = "╘",
+  [" s d"] = "╒",
+  [" d s"] = "╓",
+  ["ddss"] = "╫",
+  ["ssdd"] = "╪",
+  ["s s "] = "┘",
+  [" s s"] = "┌",
+  [" s b"] = "┍",
+  [" b s"] = "┎",
+  [" b s"] = "┎",
+  [" b b"] = "┏",
+  [" sb "] = "┑",
+  [" bs "] = "┒",
+  [" bb "] = "┓",
+  ["s  b"] = "┕",
+  ["b  s"] = "┖",
+  ["b  b"] = "┗",
+  ["s b "] = "┙",
+  ["b s "] = "┚",
+  ["b b "] = "┛",
+  ["ss b"] = "┝",
+  ["bs s"] = "┞",
+  ["sb s"] = "┟",
+  ["bb s"] = "┠",
+  ["bs b"] = "┡",
+  ["sb b"] = "┢",
+  ["bb b"] = "┣",
+  ["ssb "] = "┥",
+  ["bss "] = "┦",
+  ["sbs "] = "┧",
+  ["bbs "] = "┨",
+  ["bsb "] = "┩",
+  ["sbb "] = "┪",
+  ["bbb "] = "┫",
+  [" sbs"] = "┭",
+  [" ssb"] = "┮",
+  [" sbb"] = "┯",
+  [" bss"] = "┰",
+  [" bbs"] = "┱",
+  [" bsb"] = "┲",
+  [" bbb"] = "┳",
+  ["s bs"] = "┵",
+  ["s sb"] = "┶",
+  ["s bb"] = "┷",
+  ["b ss"] = "┸",
+  ["b bs"] = "┹",
+  ["b sb"] = "┺",
+  ["b bb"] = "┻",
+  ["ssbs"] = "┽",
+  ["sssb"] = "┾",
+  ["ssbb"] = "┿",
+  ["bsss"] = "╀",
+  ["sbss"] = "╁",
+  ["bbss"] = "╂",
+  ["bsbs"] = "╃",
+  ["bssb"] = "╄",
+  ["sbbs"] = "╅",
+  ["sbsb"] = "╆",
+  ["bsbb"] = "╇",
+  ["sbbb"] = "╈",
+  ["bbbs"] = "╉",
+  ["bbsb"] = "╊",
+  ["bbbb"] = "╋",
+  ["bb  "] = "┃",
+  ["  bb"] = "━",
+  ["  bb"] = "━",
 }
 local M = {}
 function M.log(str)
@@ -400,7 +393,7 @@ function M.draw_box(style)
 
   local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
   local sbyte = M.get_bytes(line, ccol)
-  vim.api.nvim_win_set_cursor(0, {clnum, sbyte+1})
+  vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
 end
 
@@ -667,7 +660,7 @@ function M.draw_box_over(style)
 
   local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
   local sbyte = M.get_bytes(line, ccol)
-  vim.api.nvim_win_set_cursor(0, {clnum, sbyte+1})
+  vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
 end
 
@@ -723,16 +716,32 @@ function M.fill_box()
   end
 end
 
-function M.gen(opts)
-  for c, opt in pairs(charset) do
-    if opt[1] == opts[1] and opt[2] == opts[2] and opt[3] == opts[3] and opt[4] == opts[4] then
-      return c
-    end
+function M.set_line(opts, new_char)
+  charset[table.concat(opts, "")] = new_char
+end
+
+function M.set_arrow(dir, new_char)
+  if dir == "up" then
+    arrow_chars.up = new_char
+  elseif dir == "down" then
+    arrow_chars.down = new_char
+  elseif dir == "left" then
+    arrow_chars.left = new_char
+  elseif dir == "right" then
+    arrow_chars.right = new_char
+  else
+    print(("venn.nvim: unknown dir for arrow %s!"):format(dir))
   end
 end
+function M.gen(opts)
+  return charset[table.concat(opts, "")]
+end
 function M.parse(sym)
-  local opts = charset[sym] or arrows[sym]
-  return vim.deepcopy(opts)
+  for opt, c in pairs(charset) do
+    if c == sym then
+      return vim.split(opt, "")
+    end
+  end
 end
 
 return M
