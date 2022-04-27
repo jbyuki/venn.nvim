@@ -6,6 +6,16 @@ function M.parse(sym)
       return vim.split(opt, "")
     end
   end
+
+  if sym == arrow_chars.up then
+    return {" ", "s", " ", " "}
+  elseif sym == arrow_chars.down then
+    return {"s", " ", " ", " "}
+  elseif sym == arrow_chars.left then
+    return {" ", " ", " ", "s"}
+  elseif sym == arrow_chars.right then
+    return {" ", " ", "s", " "}
+  end
 end
 
 @script_variables+=
