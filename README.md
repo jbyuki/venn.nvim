@@ -32,6 +32,47 @@ Usage
 Key Mapping
 -----------
 
+### Using [Hydra](https://github.com/anuvyklack/hydra.nvim)
+```lua
+local hint = [[
+^^^^    Draw
+^^^^-------------
+Arrows: _<C-h>_ _<C-j>_ _<C-k>_ _<C-l>_
+Box (select box with visual block first): _<C-f>_
+^ ^				_<Esc>_: exit
+]]
+
+Hydra({
+	name = 'Draw',
+	hint = hint,
+	config = {
+		color = 'pink',
+		invoke_on_body = true,
+		hint = {
+			position = 'bottom',
+			border = 'rounded'
+		},
+		on_enter = function()
+			vim.opt_local.virtualedit = 'all'
+		end,
+		on_exit = function()
+			vim.opt_local.virtualedit = ''
+		end
+	},
+	mode = {'n'},
+	body = '<leader>draw',
+	heads = {
+		{ '<C-h>', '<C-v>h:VBox<CR>' },
+		{ '<C-j>', '<C-v>j:VBox<CR>' },
+		{ '<C-k>', '<C-v>k:VBox<CR>' },
+		{ '<C-l>', '<C-v>l:VBox<CR>' },
+		{ '<C-f>', ':VBox<CR>', { mode = 'v' }},
+		{ '<Esc>', nil, { exit = true, nowait = true } },
+	}
+})
+```
+
+### Using toggle command
 You can map `:VBox` commands to allow different ways of drawing lines.
 
 Use the following function in your neovim config to toggle drawing lines on `HJKL` directional keys to allow for faster creation of diagrams:
