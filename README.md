@@ -32,6 +32,10 @@ Usage
 Key Mapping
 -----------
 
+### Using [hyrda.nvim](https://github.com/anuvyklack/hydra.nvim)
+[Draw diagrams](https://github.com/anuvyklack/hydra.nvim/wiki/Draw-diagrams)
+
+### Using toggle command
 You can map `:VBox` commands to allow different ways of drawing lines.
 
 Use the following function in your neovim config to toggle drawing lines on `HJKL` directional keys to allow for faster creation of diagrams:
