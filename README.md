@@ -32,7 +32,7 @@ Usage
 Key Mapping
 -----------
 
-### Using [hyrda.nvim](https://github.com/anuvyklack/hydra.nvim)
+### Using [hydra.nvim](https://github.com/anuvyklack/hydra.nvim)
 [Draw diagrams](https://github.com/anuvyklack/hydra.nvim/wiki/Draw-diagrams)
 
 ### Using toggle command
