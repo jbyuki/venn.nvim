@@ -400,9 +400,9 @@ end
 function M.get_width(line, byte)
   if byte then
     local substring = line:sub(1, byte)
-    return vim.api.nvim_strwidth(substring)
+    return vim.fn.strdisplaywidth(substring)
   else
-    return vim.api.nvim_strwidth(line)
+    return vim.fn.strdisplaywidth(line)
   end
 end
 
@@ -412,7 +412,7 @@ function M.get_bytes(line, col)
   local len = vim.str_utfindex(line)
   for i=0,len do
     local idx = vim.str_byteindex(line, i)
-    if vim.api.nvim_strwidth(line:sub(1,idx)) >= col then
+    if vim.fn.strdisplaywidth(line:sub(1,idx)) >= col then
       return idx
     end
   end
