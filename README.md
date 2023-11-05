@@ -35,6 +35,8 @@ Key Mapping
 ### Using [hydra.nvim](https://github.com/anuvyklack/hydra.nvim)
 [Draw diagrams](https://github.com/anuvyklack/hydra.nvim/wiki/Draw-diagrams)
 
+For a more in-depth configuration: [#27](../../issues/27)
+
 ### Using toggle command
 You can map `:VBox` commands to allow different ways of drawing lines.
 
