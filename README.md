@@ -58,7 +58,11 @@ function _G.Toggle_venn()
         vim.api.nvim_buf_set_keymap(0, "v", "f", ":VBox<CR>", {noremap = true})
     else
         vim.cmd[[setlocal ve=]]
-        vim.cmd[[mapclear <buffer>]]
+        vim.api.nvim_buf_del_keymap(0, "n", "J")
+        vim.api.nvim_buf_del_keymap(0, "n", "K")
+        vim.api.nvim_buf_del_keymap(0, "n", "L")
+        vim.api.nvim_buf_del_keymap(0, "n", "H")
+        vim.api.nvim_buf_del_keymap(0, "v", "f")
         vim.b.venn_enabled = nil
     end
 end
