@@ -25,17 +25,39 @@ Usage
 
 * `set virtualedit=all` or `set ve=all`. This will allow you to freely move the cursor in the buffer. (see `help virtualedit`).
 
-* Enter in Visual Block mode using `<C-v>`. Select the region where the box should be.
+* Enter in Visual Block mode using `<C-v>` or `<C-q>`. Select the region where the box should be.
 
 * Invoke `:VBox`. This will draw a rectangle. In case, it has a width or a height of 1, it will draw a line.
 
 Key Mapping
 -----------
 
-### Using [hydra.nvim](https://github.com/anuvyklack/hydra.nvim)
-[Draw diagrams](https://github.com/anuvyklack/hydra.nvim/wiki/Draw-diagrams)
+### Using [hydra.nvim](https://github.com/nvimtools/hydra.nvim)
 
-For a more in-depth configuration: [#27](../../issues/27)
+Any modal keymapping system would work to get additional keys usable for drawing
+and moving selections, since there are many options to draw and move around pieces.
+
+#### Draw diagrams
+
+A relative complete configuration to draw diagrams with boxes, lines and arrows
+in utf can be found
+[in the hydra wiki](https://github.com/nvimtools/hydra.nvim/wiki/Draw-diagrams)
+and the more extensive version including explanations
+[in this repo wiki](https://github.com/jbyuki/venn.nvim/wiki/Draw-diagrams).
+
+#### Moving selection
+
+Drawing and text repositioning is a frequent operation on more complex
+graphics. While `gR` allows to overwrite text from left to right, it does not
+allow to move (text) selections around.
+Using [mini.move](https://github.com/echasnovski/mini.move)
+works with for now main usability restriction of
+[no correct fixup after collisions](https://github.com/echasnovski/mini.nvim/issues/838)
+and an example configuration can be found
+[in the hydra wiki](https://github.com/nvimtools/hydra.nvim/wiki/Move-selection)
+and the more extensive version including explanations
+[in this repo wiki](https://github.com/jbyuki/venn.nvim/wiki/Move-selection).
+
 
 ### Using toggle command
 You can map `:VBox` commands to allow different ways of drawing lines.
