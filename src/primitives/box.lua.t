@@ -182,6 +182,9 @@ vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen_utf({style, style, 
 local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
+local arrow_chars_ascii = {
+  up = '^', down = 'v', left = '<', right = '>',
+}
 
 @draw_vertical_line+=
 for i=slnum-1,elnum-1 do

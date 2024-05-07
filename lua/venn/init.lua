@@ -8,6 +8,9 @@ end
 local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
+local arrow_chars_ascii = {
+  up = '^', down = 'v', left = '<', right = '>',
+}
 
 local charset_utf = {
   -- [ up down left right ] = char
