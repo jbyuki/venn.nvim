@@ -662,7 +662,7 @@ function M.draw_box_utf_over(style)
 
 end
 
-function M.fill_box()
+function M.fill_box_utf()
   -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))

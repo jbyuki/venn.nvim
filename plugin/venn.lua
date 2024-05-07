@@ -7,4 +7,4 @@ vim.cmd [[command! -range VBoxO lua require"venn".draw_box_utf_over("s")]]
 vim.cmd [[command! -range VBoxDO lua require"venn".draw_box_utf_over("d")]]
 vim.cmd [[command! -range VBoxHO lua require"venn".draw_box_utf_over("b")]]
 
-vim.cmd [[command! -range VFill lua require"venn".fill_box()]]
+vim.cmd [[command! -range VFill lua require"venn".fill_box_utf()]]
