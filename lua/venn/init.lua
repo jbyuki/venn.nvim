@@ -126,7 +126,7 @@ function M.log(str)
   end
 end
 
-function M.draw_box(style)
+function M.draw_box_utf(style)
   -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
@@ -417,7 +417,7 @@ function M.get_bytes(line, col)
   return string.len(line)
 end
 
-function M.draw_box_over(style)
+function M.draw_box_utf_over(style)
   -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))

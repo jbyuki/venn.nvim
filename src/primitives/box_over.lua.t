@@ -1,6 +1,6 @@
 ##../venn
 @implement+=
-function M.draw_box_over(style)
+function M.draw_box_utf_over(style)
   @get_box_dimensions
   @get_lines_in_range
 
