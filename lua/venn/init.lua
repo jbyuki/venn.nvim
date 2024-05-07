@@ -9,7 +9,7 @@ local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
 
-local charset = {
+local charset_utf = {
   -- [ up down left right ] = char
   --      s : single
   --      d : double
@@ -715,7 +715,7 @@ function M.fill_box()
 end
 
 function M.set_line(opts, new_char)
-  charset[table.concat(opts, "")] = new_char
+  charset_utf[table.concat(opts, "")] = new_char
 end
 
 function M.set_arrow(dir, new_char)
@@ -732,10 +732,10 @@ function M.set_arrow(dir, new_char)
   end
 end
 function M.gen(opts)
-  return charset[table.concat(opts, "")]
+  return charset_utf[table.concat(opts, "")]
 end
 function M.parse(sym)
-  for opt, c in pairs(charset) do
+  for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")
     end

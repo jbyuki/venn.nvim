@@ -1,7 +1,7 @@
 ##../venn
 @implement+=
 function M.parse(sym)
-  for opt, c in pairs(charset) do
+  for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")
     end
@@ -19,7 +19,7 @@ function M.parse(sym)
 end
 
 @script_variables+=
-local charset = {
+local charset_utf = {
   -- [ up down left right ] = char
   --      s : single
   --      d : double

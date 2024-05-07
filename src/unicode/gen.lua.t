@@ -1,5 +1,5 @@
 ##../venn
 @implement+=
 function M.gen(opts)
-  return charset[table.concat(opts, "")]
+  return charset_utf[table.concat(opts, "")]
 end

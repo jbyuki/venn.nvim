@@ -1,7 +1,7 @@
 ##../venn
 @implement+=
 function M.set_line(opts, new_char)
-  charset[table.concat(opts, "")] = new_char
+  charset_utf[table.concat(opts, "")] = new_char
 end
 
 function M.set_arrow(dir, new_char)
