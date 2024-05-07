@@ -714,7 +714,7 @@ function M.fill_box()
   end
 end
 
-function M.set_line(opts, new_char)
+function M.set_line_utf(opts, new_char)
   charset_utf[table.concat(opts, "")] = new_char
 end
 
