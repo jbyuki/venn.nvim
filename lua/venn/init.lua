@@ -718,7 +718,7 @@ function M.set_line(opts, new_char)
   charset_utf[table.concat(opts, "")] = new_char
 end
 
-function M.set_arrow(dir, new_char)
+function M.set_arrow_utf(dir, new_char)
   if dir == "up" then
     arrow_chars_utf.up = new_char
   elseif dir == "down" then
