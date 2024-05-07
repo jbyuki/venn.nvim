@@ -188,13 +188,13 @@ function M.draw_box(style)
       local ptail_opts = M.parse(ptail)
       if ptail_opts then
         ptail_opts[2] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
       local phead_opts = M.parse(phead)
       if phead_opts then
         phead_opts[1] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     else
@@ -211,13 +211,13 @@ function M.draw_box(style)
       local ptail_opts = M.parse(ptail)
       if ptail_opts then
         ptail_opts[1] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
       local phead_opts = M.parse(phead)
       if phead_opts then
         phead_opts[2] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     end
@@ -235,9 +235,9 @@ function M.draw_box(style)
         end
 
       elseif i == elnum-1 or i == slnum-1 then
-        c = tail or M.gen({style, style, " ", " " })
+        c = tail or M.gen_utf({style, style, " ", " " })
       else
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       end
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
     end
@@ -258,13 +258,13 @@ function M.draw_box(style)
       local ptail_opts = M.parse(ptail)
       if ptail_opts then
         ptail_opts[4] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
       local phead_opts = M.parse(phead)
       if phead_opts then
         phead_opts[3] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     else
@@ -281,13 +281,13 @@ function M.draw_box(style)
       local ptail_opts = M.parse(ptail)
       if ptail_opts then
         ptail_opts[3] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
       local phead_opts = M.parse(phead)
       if phead_opts then
         phead_opts[4] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     end
@@ -303,9 +303,9 @@ function M.draw_box(style)
         end
 
       elseif i == scol or i == ecol then
-        c = tail or M.gen({" ", " ", style, style })
+        c = tail or M.gen_utf({" ", " ", style, style })
       else
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       end
       line = line .. c
     end
@@ -319,13 +319,13 @@ function M.draw_box(style)
     local topborder = ""
     for i=scol,ecol do
       if i == scol then
-        topborder = topborder .. M.gen({" ", style, " ", style})
+        topborder = topborder .. M.gen_utf({" ", style, " ", style})
 
       elseif i == ecol then
-        topborder = topborder .. M.gen({" ", style, style, " " })
+        topborder = topborder .. M.gen_utf({" ", style, style, " " })
 
       else
-        topborder = topborder .. M.gen({" ", " ", style, style })
+        topborder = topborder .. M.gen_utf({" ", " ", style, style })
 
       end
     end
@@ -337,13 +337,13 @@ function M.draw_box(style)
     local botborder = ""
     for i=scol,ecol do
       if i == scol then
-        botborder = botborder .. M.gen({style, " ", " ", style })
+        botborder = botborder .. M.gen_utf({style, " ", " ", style })
 
       elseif i == ecol then
-        botborder = botborder .. M.gen({style, " ", style, " " })
+        botborder = botborder .. M.gen_utf({style, " ", style, " " })
 
       else
-        botborder = botborder .. M.gen({" ", " ", style, style })
+        botborder = botborder .. M.gen_utf({" ", " ", style, style })
 
       end
     end
@@ -357,12 +357,12 @@ function M.draw_box(style)
       local len = string.len(lines[i-slnum+2])
       local sbyte = M.get_bytes(lines[i-slnum+2], scol)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
-      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen({style, style, " ", " " }) })
+      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen_utf({style, style, " ", " " }) })
       lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 
       local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
       local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
-      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
+      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen_utf({style, style, " ", " " }) })
 
     end
 
@@ -484,14 +484,14 @@ function M.draw_box_over(style)
       elseif i == elnum-1 or i == slnum-1 then
         pold_opts[1] = style
         pold_opts[2] = style
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       else
         pold_opts[1] = style
         pold_opts[2] = style
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       end
 
-      c = M.gen(pold_opts) or c
+      c = M.gen_utf(pold_opts) or c
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
     end
 
@@ -517,14 +517,14 @@ function M.draw_box_over(style)
       elseif i == scol or i == ecol then
         pold_opts[3] = style
         pold_opts[4] = style
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       else
         pold_opts[3] = style
         pold_opts[4] = style
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       end
 
-      c = M.gen(pold_opts) or c
+      c = M.gen_utf(pold_opts) or c
 
       line = line .. c
     end
@@ -545,21 +545,21 @@ function M.draw_box_over(style)
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", style, " ", style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, " ", style})
         topborder = topborder .. old
 
       elseif i == ecol then
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[3] = style
-        local old = M.gen(pold_opts) or M.gen({" ", style, style, " "})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, style, " "})
         topborder = topborder .. old
 
       else
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style})
         topborder = topborder .. old
 
 
@@ -580,21 +580,21 @@ function M.draw_box_over(style)
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({style, " ", " ", style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", " ", style})
         botborder = botborder .. old
 
       elseif i == ecol then
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[3] = style
-        local old = M.gen(pold_opts) or M.gen({style, " ", style, " "})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", style, " "})
         botborder = botborder .. old
 
       else
         local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style })
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style })
         botborder = botborder .. old
 
       end
@@ -613,8 +613,8 @@ function M.draw_box_over(style)
       local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
-      local old = M.gen(pold_opts)
-      local old = old or M.gen({style, style, " ", " " })
+      local old = M.gen_utf(pold_opts)
+      local old = old or M.gen_utf({style, style, " ", " " })
 
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { old })
       lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
@@ -626,8 +626,8 @@ function M.draw_box_over(style)
       local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
-      local old = M.gen(pold_opts)
-      local old = old or M.gen({style, style, " ", " " })
+      local old = M.gen_utf(pold_opts)
+      local old = old or M.gen_utf({style, style, " ", " " })
 
       vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { old })
 
@@ -731,7 +731,7 @@ function M.set_arrow_utf(dir, new_char)
     print(("venn.nvim: unknown dir for arrow %s!"):format(dir))
   end
 end
-function M.gen(opts)
+function M.gen_utf(opts)
   return charset_utf[table.concat(opts, "")]
 end
 function M.parse(sym)
