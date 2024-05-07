@@ -185,7 +185,7 @@ for i=scol,ecol do
   @get_character_at_position_top
   local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
 
-  local c 
+  local c
   if i == ccol then
     @determine_if_arrow_left_or_right_over
   elseif i == scol or i == ecol then

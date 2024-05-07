@@ -36,7 +36,7 @@ function M.get_width(line, byte)
 end
 
 @get_box_dimensions+=
--- line is 1 indexed, col is 0 indexed 
+-- line is 1 indexed, col is 0 indexed
 local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
 local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
@@ -171,7 +171,7 @@ lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
   0 |1 |2 3
    a| b| c
   1 |2 |3 4
-    lua 
+    lua
 
 @draw_right_border+=
 local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
@@ -209,7 +209,7 @@ end
 @draw_horizontal_line+=
 local line = ''
 for i=scol,ecol do
-  local c 
+  local c
   if i == ccol then
     @determine_if_arrow_left_or_right
   elseif i == scol or i == ecol then
@@ -346,7 +346,7 @@ end
 @restore_cursor_position+=
 M.log("restore cursor position")
 
-local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
 local sbyte = M.get_bytes(line, ccol)
 vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
