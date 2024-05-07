@@ -5,11 +5,14 @@ if vim.g.venn_debug then
 
 end
 
-local arrow_chars = {
+local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
+local arrow_chars_ascii = {
+  up = '^', down = 'v', left = '<', right = '>',
+}
 
-local charset = {
+local charset_utf = {
   -- [ up down left right ] = char
   --      s : single
   --      d : double
@@ -56,7 +59,6 @@ local charset = {
   ["s s "] = "┘",
   [" s s"] = "┌",
   [" s b"] = "┍",
-  [" b s"] = "┎",
   [" b s"] = "┎",
   [" b b"] = "┏",
   [" sb "] = "┑",
@@ -113,7 +115,6 @@ local charset = {
   ["bbbb"] = "╋",
   ["bb  "] = "┃",
   ["  bb"] = "━",
-  ["  bb"] = "━",
 }
 local M = {}
 function M.log(str)
@@ -128,8 +129,8 @@ function M.log(str)
   end
 end
 
-function M.draw_box(style)
-  -- line is 1 indexed, col is 0 indexed 
+function M.draw_box_utf(style)
+  -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
@@ -187,16 +188,16 @@ function M.draw_box(style)
 
       local phead = lines[#lines]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[2] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[1] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     else
@@ -210,16 +211,16 @@ function M.draw_box(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[1] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[2] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     end
@@ -231,15 +232,15 @@ function M.draw_box(style)
       local c
       if i+1 == clnum then
         if i == slnum-1 then
-          c = head or arrow_chars.up
+          c = head or arrow_chars_utf.up
         else
-          c = head or arrow_chars.down
+          c = head or arrow_chars_utf.down
         end
 
       elseif i == elnum-1 or i == slnum-1 then
-        c = tail or M.gen({style, style, " ", " " })
+        c = tail or M.gen_utf({style, style, " ", " " })
       else
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       end
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
     end
@@ -257,16 +258,16 @@ function M.draw_box(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[4] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[3] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     else
@@ -280,34 +281,34 @@ function M.draw_box(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[3] = style
-        tail = M.gen(ptail_opts) or tail
+        tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[4] = style
-        head = M.gen(phead_opts) or head
+        head = M.gen_utf(phead_opts) or head
       end
 
     end
 
     local line = ''
     for i=scol,ecol do
-      local c 
+      local c
       if i == ccol then
         if i == scol then
-          c = head or arrow_chars.left
+          c = head or arrow_chars_utf.left
         else
-          c = head or arrow_chars.right
+          c = head or arrow_chars_utf.right
         end
 
       elseif i == scol or i == ecol then
-        c = tail or M.gen({" ", " ", style, style })
+        c = tail or M.gen_utf({" ", " ", style, style })
       else
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       end
       line = line .. c
     end
@@ -321,13 +322,13 @@ function M.draw_box(style)
     local topborder = ""
     for i=scol,ecol do
       if i == scol then
-        topborder = topborder .. M.gen({" ", style, " ", style})
+        topborder = topborder .. M.gen_utf({" ", style, " ", style})
 
       elseif i == ecol then
-        topborder = topborder .. M.gen({" ", style, style, " " })
+        topborder = topborder .. M.gen_utf({" ", style, style, " " })
 
       else
-        topborder = topborder .. M.gen({" ", " ", style, style })
+        topborder = topborder .. M.gen_utf({" ", " ", style, style })
 
       end
     end
@@ -339,13 +340,13 @@ function M.draw_box(style)
     local botborder = ""
     for i=scol,ecol do
       if i == scol then
-        botborder = botborder .. M.gen({style, " ", " ", style })
+        botborder = botborder .. M.gen_utf({style, " ", " ", style })
 
       elseif i == ecol then
-        botborder = botborder .. M.gen({style, " ", style, " " })
+        botborder = botborder .. M.gen_utf({style, " ", style, " " })
 
       else
-        botborder = botborder .. M.gen({" ", " ", style, style })
+        botborder = botborder .. M.gen_utf({" ", " ", style, style })
 
       end
     end
@@ -359,12 +360,12 @@ function M.draw_box(style)
       local len = string.len(lines[i-slnum+2])
       local sbyte = M.get_bytes(lines[i-slnum+2], scol)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
-      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen({style, style, " ", " " }) })
+      vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen_utf({style, style, " ", " " }) })
       lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 
       local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
       local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
-      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
+      vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen_utf({style, style, " ", " " }) })
 
     end
 
@@ -391,7 +392,7 @@ function M.draw_box(style)
   vim.cmd([[exe "norm! \<C-V>]] .. hori_mvt .. vert_mvt .. [[\<esc>"]])
   M.log("restore cursor position")
 
-  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
   local sbyte = M.get_bytes(line, ccol)
   vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
@@ -419,8 +420,8 @@ function M.get_bytes(line, col)
   return string.len(line)
 end
 
-function M.draw_box_over(style)
-  -- line is 1 indexed, col is 0 indexed 
+function M.draw_box_utf_over(style)
+  -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
@@ -471,29 +472,29 @@ function M.draw_box_over(style)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
       local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
       local c
       if i+1 == clnum then
         if i == slnum-1 then
-          c = arrow_chars.up
+          c = arrow_chars_utf.up
           pold_opts[2] = style
         else
-          c = arrow_chars.down
+          c = arrow_chars_utf.down
           pold_opts[1] = style
         end
 
       elseif i == elnum-1 or i == slnum-1 then
         pold_opts[1] = style
         pold_opts[2] = style
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       else
         pold_opts[1] = style
         pold_opts[2] = style
-        c = M.gen({style, style, " ", " " })
+        c = M.gen_utf({style, style, " ", " " })
       end
 
-      c = M.gen(pold_opts) or c
+      c = M.gen_utf(pold_opts) or c
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
     end
 
@@ -505,28 +506,28 @@ function M.draw_box_over(style)
 
       local pold = lines[1]:sub(sbyte+1, ebyte)
 
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
-      local c 
+      local c
       if i == ccol then
         if i == scol then
-          c = arrow_chars.left
+          c = arrow_chars_utf.left
           pold_opts[4] = style
         else
-          c = arrow_chars.right
+          c = arrow_chars_utf.right
           pold_opts[3] = style
         end
       elseif i == scol or i == ecol then
         pold_opts[3] = style
         pold_opts[4] = style
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       else
         pold_opts[3] = style
         pold_opts[4] = style
-        c = M.gen({" ", " ", style, style })
+        c = M.gen_utf({" ", " ", style, style })
       end
 
-      c = M.gen(pold_opts) or c
+      c = M.gen_utf(pold_opts) or c
 
       line = line .. c
     end
@@ -544,24 +545,24 @@ function M.draw_box_over(style)
       local pold = lines[1]:sub(sbyte+1, ebyte)
 
       if i == scol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", style, " ", style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, " ", style})
         topborder = topborder .. old
 
       elseif i == ecol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[3] = style
-        local old = M.gen(pold_opts) or M.gen({" ", style, style, " "})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, style, " "})
         topborder = topborder .. old
 
       else
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style})
         topborder = topborder .. old
 
 
@@ -579,24 +580,24 @@ function M.draw_box_over(style)
       local pold = lines[#lines]:sub(sbyte+1, ebyte)
 
       if i == scol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({style, " ", " ", style})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", " ", style})
         botborder = botborder .. old
 
       elseif i == ecol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[3] = style
-        local old = M.gen(pold_opts) or M.gen({style, " ", style, " "})
+        local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", style, " "})
         botborder = botborder .. old
 
       else
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
-        local old = M.gen(pold_opts) or M.gen({" ", " ", style, style })
+        local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style })
         botborder = botborder .. old
 
       end
@@ -612,11 +613,11 @@ function M.draw_box_over(style)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
       local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
-      local old = M.gen(pold_opts)
-      local old = old or M.gen({style, style, " ", " " })
+      local old = M.gen_utf(pold_opts)
+      local old = old or M.gen_utf({style, style, " ", " " })
 
       vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { old })
       lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
@@ -625,11 +626,11 @@ function M.draw_box_over(style)
       local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
 
       local pold = lines[i-slnum+2]:sub(ebyte+1, ebyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
-      local old = M.gen(pold_opts)
-      local old = old or M.gen({style, style, " ", " " })
+      local old = M.gen_utf(pold_opts)
+      local old = old or M.gen_utf({style, style, " ", " " })
 
       vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { old })
 
@@ -658,14 +659,14 @@ function M.draw_box_over(style)
   vim.cmd([[exe "norm! \<C-V>]] .. hori_mvt .. vert_mvt .. [[\<esc>"]])
   M.log("restore cursor position")
 
-  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+  local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
   local sbyte = M.get_bytes(line, ccol)
   vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 
 end
 
-function M.fill_box()
-  -- line is 1 indexed, col is 0 indexed 
+function M.fill_box_utf()
+  -- line is 1 indexed, col is 0 indexed
   local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
   local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
@@ -716,40 +717,40 @@ function M.fill_box()
   end
 end
 
-function M.set_line(opts, new_char)
-  charset[table.concat(opts, "")] = new_char
+function M.set_line_utf(opts, new_char)
+  charset_utf[table.concat(opts, "")] = new_char
 end
 
-function M.set_arrow(dir, new_char)
+function M.set_arrow_utf(dir, new_char)
   if dir == "up" then
-    arrow_chars.up = new_char
+    arrow_chars_utf.up = new_char
   elseif dir == "down" then
-    arrow_chars.down = new_char
+    arrow_chars_utf.down = new_char
   elseif dir == "left" then
-    arrow_chars.left = new_char
+    arrow_chars_utf.left = new_char
   elseif dir == "right" then
-    arrow_chars.right = new_char
+    arrow_chars_utf.right = new_char
   else
     print(("venn.nvim: unknown dir for arrow %s!"):format(dir))
   end
 end
-function M.gen(opts)
-  return charset[table.concat(opts, "")]
+function M.gen_utf(opts)
+  return charset_utf[table.concat(opts, "")]
 end
-function M.parse(sym)
-  for opt, c in pairs(charset) do
+function M.parse_utf(sym)
+  for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")
     end
   end
 
-  if sym == arrow_chars.up then
+  if sym == arrow_chars_utf.up then
     return {" ", "s", " ", " "}
-  elseif sym == arrow_chars.down then
+  elseif sym == arrow_chars_utf.down then
     return {"s", " ", " ", " "}
-  elseif sym == arrow_chars.left then
+  elseif sym == arrow_chars_utf.left then
     return {" ", " ", " ", "s"}
-  elseif sym == arrow_chars.right then
+  elseif sym == arrow_chars_utf.right then
     return {" ", " ", "s", " "}
   end
 end

@@ -1,25 +1,25 @@
 ##../venn
 @implement+=
-function M.parse(sym)
-  for opt, c in pairs(charset) do
+function M.parse_utf(sym)
+  for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")
     end
   end
 
-  if sym == arrow_chars.up then
+  if sym == arrow_chars_utf.up then
     return {" ", "s", " ", " "}
-  elseif sym == arrow_chars.down then
+  elseif sym == arrow_chars_utf.down then
     return {"s", " ", " ", " "}
-  elseif sym == arrow_chars.left then
+  elseif sym == arrow_chars_utf.left then
     return {" ", " ", " ", "s"}
-  elseif sym == arrow_chars.right then
+  elseif sym == arrow_chars_utf.right then
     return {" ", " ", "s", " "}
   end
 end
 
 @script_variables+=
-local charset = {
+local charset_utf = {
   -- [ up down left right ] = char
   --      s : single
   --      d : double
@@ -66,7 +66,6 @@ local charset = {
   ["s s "] = "┘",
   [" s s"] = "┌",
   [" s b"] = "┍",
-  [" b s"] = "┎",
   [" b s"] = "┎",
   [" b b"] = "┏",
   [" sb "] = "┑",
@@ -122,6 +121,5 @@ local charset = {
   ["bbsb"] = "╊",
   ["bbbb"] = "╋",
   ["bb  "] = "┃",
-  ["  bb"] = "━",
   ["  bb"] = "━",
 }

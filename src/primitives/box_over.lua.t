@@ -1,6 +1,6 @@
 ##../venn
 @implement+=
-function M.draw_box_over(style)
+function M.draw_box_utf_over(style)
   @get_box_dimensions
   @get_lines_in_range
 
@@ -46,24 +46,24 @@ local ebyte = M.get_bytes(lines[1], i+1)
 local pold = lines[1]:sub(sbyte+1, ebyte)
 
 @draw_upper_left_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[2] = style
 pold_opts[4] = style
-local old = M.gen(pold_opts) or M.gen({" ", style, " ", style})
+local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, " ", style})
 topborder = topborder .. old
 
 @draw_upper_right_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[2] = style
 pold_opts[3] = style
-local old = M.gen(pold_opts) or M.gen({" ", style, style, " "})
+local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, style, " "})
 topborder = topborder .. old
 
 @draw_upper_edge_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[3] = style
 pold_opts[4] = style
-local old = M.gen(pold_opts) or M.gen({" ", " ", style, style})
+local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style})
 topborder = topborder .. old
 
 
@@ -91,24 +91,24 @@ local ebyte = M.get_bytes(lines[#lines], i+1)
 local pold = lines[#lines]:sub(sbyte+1, ebyte)
 
 @draw_lower_left_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[4] = style
-local old = M.gen(pold_opts) or M.gen({style, " ", " ", style})
+local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", " ", style})
 botborder = botborder .. old
 
 @draw_lower_right_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[3] = style
-local old = M.gen(pold_opts) or M.gen({style, " ", style, " "})
+local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", style, " "})
 botborder = botborder .. old
 
 @draw_lower_edge_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[3] = style
 pold_opts[4] = style
-local old = M.gen(pold_opts) or M.gen({" ", " ", style, style })
+local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style })
 botborder = botborder .. old
 
 @draw_over_box_left_right_over+=
@@ -123,11 +123,11 @@ local sbyte = M.get_bytes(lines[i-slnum+2], scol)
 local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
 local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[2] = style
-local old = M.gen(pold_opts)
-local old = old or M.gen({style, style, " ", " " })
+local old = M.gen_utf(pold_opts)
+local old = old or M.gen_utf({style, style, " ", " " })
 
 vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { old })
 lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
@@ -137,11 +137,11 @@ local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
 local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
 
 local pold = lines[i-slnum+2]:sub(ebyte+1, ebyte_end)
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[2] = style
-local old = M.gen(pold_opts)
-local old = old or M.gen({style, style, " ", " " })
+local old = M.gen_utf(pold_opts)
+local old = old or M.gen_utf({style, style, " ", " " })
 
 vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { old })
 
@@ -151,7 +151,7 @@ for i=slnum-1,elnum-1 do
   local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
   local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-  local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+  local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
   local c
   if i+1 == clnum then
@@ -159,23 +159,23 @@ for i=slnum-1,elnum-1 do
   elseif i == elnum-1 or i == slnum-1 then
     pold_opts[1] = style
     pold_opts[2] = style
-    c = M.gen({style, style, " ", " " })
+    c = M.gen_utf({style, style, " ", " " })
   else
     pold_opts[1] = style
     pold_opts[2] = style
-    c = M.gen({style, style, " ", " " })
+    c = M.gen_utf({style, style, " ", " " })
   end
 
-  c = M.gen(pold_opts) or c
+  c = M.gen_utf(pold_opts) or c
   vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
 end
 
 @determine_arrow_up_or_down_over+=
 if i == slnum-1 then
-  c = arrow_chars.up
+  c = arrow_chars_utf.up
   pold_opts[2] = style
 else
-  c = arrow_chars.down
+  c = arrow_chars_utf.down
   pold_opts[1] = style
 end
 
@@ -183,22 +183,22 @@ end
 local line = ''
 for i=scol,ecol do
   @get_character_at_position_top
-  local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+  local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
-  local c 
+  local c
   if i == ccol then
     @determine_if_arrow_left_or_right_over
   elseif i == scol or i == ecol then
     pold_opts[3] = style
     pold_opts[4] = style
-    c = M.gen({" ", " ", style, style })
+    c = M.gen_utf({" ", " ", style, style })
   else
     pold_opts[3] = style
     pold_opts[4] = style
-    c = M.gen({" ", " ", style, style })
+    c = M.gen_utf({" ", " ", style, style })
   end
 
-  c = M.gen(pold_opts) or c
+  c = M.gen_utf(pold_opts) or c
 
   line = line .. c
 end
@@ -209,9 +209,9 @@ vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
 @determine_if_arrow_left_or_right_over+=
 if i == scol then
-  c = arrow_chars.left
+  c = arrow_chars_utf.left
   pold_opts[4] = style
 else
-  c = arrow_chars.right
+  c = arrow_chars_utf.right
   pold_opts[3] = style
 end

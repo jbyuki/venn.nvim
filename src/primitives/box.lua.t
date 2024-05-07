@@ -1,6 +1,6 @@
 ##../venn
 @implement+=
-function M.draw_box(style)
+function M.draw_box_utf(style)
   @get_box_dimensions
   @get_lines_in_range
 
@@ -36,7 +36,7 @@ function M.get_width(line, byte)
 end
 
 @get_box_dimensions+=
--- line is 1 indexed, col is 0 indexed 
+-- line is 1 indexed, col is 0 indexed
 local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
 local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
 
@@ -117,13 +117,13 @@ local ebyte = M.get_bytes(lines[1], ecol+1)
 vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { topborder })
 
 @draw_upper_left+=
-topborder = topborder .. M.gen({" ", style, " ", style})
+topborder = topborder .. M.gen_utf({" ", style, " ", style})
 
 @draw_upper_right+=
-topborder = topborder .. M.gen({" ", style, style, " " })
+topborder = topborder .. M.gen_utf({" ", style, style, " " })
 
 @draw_upper_edge+=
-topborder = topborder .. M.gen({" ", " ", style, style })
+topborder = topborder .. M.gen_utf({" ", " ", style, style })
 
 @draw_over_box_bottom+=
 M.log("draw box bot")
@@ -143,13 +143,13 @@ local ebyte = M.get_bytes(lines[#lines], ecol+1)
 vim.api.nvim_buf_set_text(0, elnum-1, sbyte, elnum-1, ebyte, { botborder })
 
 @draw_lower_left+=
-botborder = botborder .. M.gen({style, " ", " ", style })
+botborder = botborder .. M.gen_utf({style, " ", " ", style })
 
 @draw_lower_right+=
-botborder = botborder .. M.gen({style, " ", style, " " })
+botborder = botborder .. M.gen_utf({style, " ", style, " " })
 
 @draw_lower_edge+=
-botborder = botborder .. M.gen({" ", " ", style, style })
+botborder = botborder .. M.gen_utf({" ", " ", style, style })
 
 @draw_over_box_left_right+=
 M.log("draw box left right")
@@ -162,7 +162,7 @@ end
 local len = string.len(lines[i-slnum+2])
 local sbyte = M.get_bytes(lines[i-slnum+2], scol)
 local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
-vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen({style, style, " ", " " }) })
+vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end, { M.gen_utf({style, style, " ", " " }) })
 lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
 
 @scratch+=
@@ -171,16 +171,19 @@ lines[i-slnum+2] = vim.api.nvim_buf_get_lines(0, i, i+1, true)[1]
   0 |1 |2 3
    a| b| c
   1 |2 |3 4
-    lua 
+    lua
 
 @draw_right_border+=
 local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
 local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
-vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
+vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen_utf({style, style, " ", " " }) })
 
 @script_variables+=
-local arrow_chars = {
+local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
+}
+local arrow_chars_ascii = {
+  up = '^', down = 'v', left = '<', right = '>',
 }
 
 @draw_vertical_line+=
@@ -192,30 +195,30 @@ for i=slnum-1,elnum-1 do
   if i+1 == clnum then
     @determine_arrow_up_or_down
   elseif i == elnum-1 or i == slnum-1 then
-    c = tail or M.gen({style, style, " ", " " })
+    c = tail or M.gen_utf({style, style, " ", " " })
   else
-    c = M.gen({style, style, " ", " " })
+    c = M.gen_utf({style, style, " ", " " })
   end
   vim.api.nvim_buf_set_text(0, i, sbyte, i, sbyte_end , { c })
 end
 
 @determine_arrow_up_or_down+=
 if i == slnum-1 then
-  c = head or arrow_chars.up
+  c = head or arrow_chars_utf.up
 else
-  c = head or arrow_chars.down
+  c = head or arrow_chars_utf.down
 end
 
 @draw_horizontal_line+=
 local line = ''
 for i=scol,ecol do
-  local c 
+  local c
   if i == ccol then
     @determine_if_arrow_left_or_right
   elseif i == scol or i == ecol then
-    c = tail or M.gen({" ", " ", style, style })
+    c = tail or M.gen_utf({" ", " ", style, style })
   else
-    c = M.gen({" ", " ", style, style })
+    c = M.gen_utf({" ", " ", style, style })
   end
   line = line .. c
 end
@@ -226,9 +229,9 @@ vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
 @determine_if_arrow_left_or_right+=
 if i == scol then
-  c = head or arrow_chars.left
+  c = head or arrow_chars_utf.left
 else
-  c = head or arrow_chars.right
+  c = head or arrow_chars_utf.right
 end
 
 @connect_line_if_possible_vertical+=
@@ -260,17 +263,17 @@ else
 end
 
 @connect_line_going_down+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[2] = style
-  tail = M.gen(ptail_opts) or tail
+  tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_up+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[1] = style
-  tail = M.gen(ptail_opts) or tail
+  tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_if_possible_horizontal+=
@@ -302,51 +305,51 @@ else
 end
 
 @connect_line_going_right+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[4] = style
-  tail = M.gen(ptail_opts) or tail
+  tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_left+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[3] = style
-  tail = M.gen(ptail_opts) or tail
+  tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_right+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[3] = style
-  head = M.gen(phead_opts) or head
+  head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_left+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[4] = style
-  head = M.gen(phead_opts) or head
+  head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_down+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[1] = style
-  head = M.gen(phead_opts) or head
+  head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_up+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[2] = style
-  head = M.gen(phead_opts) or head
+  head = M.gen_utf(phead_opts) or head
 end
 
 @restore_cursor_position+=
 M.log("restore cursor position")
 
-local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1] 
+local line = vim.api.nvim_buf_get_lines(0, clnum-1, clnum, true)[1]
 local sbyte = M.get_bytes(line, ccol)
 vim.api.nvim_win_set_cursor(0, {clnum, sbyte})
 

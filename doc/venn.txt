@@ -16,7 +16,7 @@ https://en.wikipedia.org/wiki/Box-drawing_character
 EXAMPLES
 
 The following diagrams were all drawn using venn. This shows
-the possibilities offered by the plug-in. 
+the possibilities offered by the plug-in.
 
 >
   If some characters are not displayed correctly make sure
@@ -45,8 +45,8 @@ USAGE
 freely move the cursor inside the buffer. (see
 |virtualedit|).
 
-2. Enter in Visual Block mode using <C-v>. Select the
-region where the box should be.
+2. Enter in Visual Block mode using <C-v> or <C-q>. Select
+the region where the box should be.
 
 3. Invoke |:VBox|. This will draw a rectangle. In case, it
 has a width or a height of 1, it will draw a line.
@@ -65,19 +65,19 @@ This should be the last line of the text file.
 COMMANDS
 
                                                 *:VBox*
-:VBox                     
+:VBox
                 Draw a single line box or arrow.
 
                                                 *:VBoxD*
-:VBoxD          
+:VBoxD
                 Draw a double line box or arrow.
 
                                                 *:VBoxH*
-:VBoxH          
+:VBoxH
                 Draw a heavy line box or arrow.
 
                                                 *:VBoxO*
-:VBoxO                     
+:VBoxO
                 Draw a single line box or arrow. It tries
                 to give the impression the box is drawn
                 over existing characters.
@@ -97,16 +97,16 @@ COMMANDS
            └───┘
 
                                                 *:VBoxDO*
-:VBoxDO          
+:VBoxDO
                 Draw a double line box or arrow. Draw
                 over.
 
                                                 *:VBoxHO*
-:VBoxHO          
+:VBoxHO
                 Draw a heavy line box or arrow. Draw over.
 
                                                 *:VFill*
-:VFill          
+:VFill
                 Fill the area with a solid color.
 
  vim:tw=58:ts=8:ft=help:norl:
