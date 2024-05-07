@@ -5,7 +5,7 @@ if vim.g.venn_debug then
 
 end
 
-local arrow_chars = {
+local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
 
@@ -229,9 +229,9 @@ function M.draw_box(style)
       local c
       if i+1 == clnum then
         if i == slnum-1 then
-          c = head or arrow_chars.up
+          c = head or arrow_chars_utf.up
         else
-          c = head or arrow_chars.down
+          c = head or arrow_chars_utf.down
         end
 
       elseif i == elnum-1 or i == slnum-1 then
@@ -297,9 +297,9 @@ function M.draw_box(style)
       local c
       if i == ccol then
         if i == scol then
-          c = head or arrow_chars.left
+          c = head or arrow_chars_utf.left
         else
-          c = head or arrow_chars.right
+          c = head or arrow_chars_utf.right
         end
 
       elseif i == scol or i == ecol then
@@ -474,10 +474,10 @@ function M.draw_box_over(style)
       local c
       if i+1 == clnum then
         if i == slnum-1 then
-          c = arrow_chars.up
+          c = arrow_chars_utf.up
           pold_opts[2] = style
         else
-          c = arrow_chars.down
+          c = arrow_chars_utf.down
           pold_opts[1] = style
         end
 
@@ -508,10 +508,10 @@ function M.draw_box_over(style)
       local c
       if i == ccol then
         if i == scol then
-          c = arrow_chars.left
+          c = arrow_chars_utf.left
           pold_opts[4] = style
         else
-          c = arrow_chars.right
+          c = arrow_chars_utf.right
           pold_opts[3] = style
         end
       elseif i == scol or i == ecol then
@@ -720,13 +720,13 @@ end
 
 function M.set_arrow(dir, new_char)
   if dir == "up" then
-    arrow_chars.up = new_char
+    arrow_chars_utf.up = new_char
   elseif dir == "down" then
-    arrow_chars.down = new_char
+    arrow_chars_utf.down = new_char
   elseif dir == "left" then
-    arrow_chars.left = new_char
+    arrow_chars_utf.left = new_char
   elseif dir == "right" then
-    arrow_chars.right = new_char
+    arrow_chars_utf.right = new_char
   else
     print(("venn.nvim: unknown dir for arrow %s!"):format(dir))
   end
@@ -741,13 +741,13 @@ function M.parse(sym)
     end
   end
 
-  if sym == arrow_chars.up then
+  if sym == arrow_chars_utf.up then
     return {" ", "s", " ", " "}
-  elseif sym == arrow_chars.down then
+  elseif sym == arrow_chars_utf.down then
     return {"s", " ", " ", " "}
-  elseif sym == arrow_chars.left then
+  elseif sym == arrow_chars_utf.left then
     return {" ", " ", " ", "s"}
-  elseif sym == arrow_chars.right then
+  elseif sym == arrow_chars_utf.right then
     return {" ", " ", "s", " "}
   end
 end

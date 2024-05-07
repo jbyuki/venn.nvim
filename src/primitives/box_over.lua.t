@@ -172,10 +172,10 @@ end
 
 @determine_arrow_up_or_down_over+=
 if i == slnum-1 then
-  c = arrow_chars.up
+  c = arrow_chars_utf.up
   pold_opts[2] = style
 else
-  c = arrow_chars.down
+  c = arrow_chars_utf.down
   pold_opts[1] = style
 end
 
@@ -209,9 +209,9 @@ vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
 @determine_if_arrow_left_or_right_over+=
 if i == scol then
-  c = arrow_chars.left
+  c = arrow_chars_utf.left
   pold_opts[4] = style
 else
-  c = arrow_chars.right
+  c = arrow_chars_utf.right
   pold_opts[3] = style
 end

@@ -179,7 +179,7 @@ local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
 vim.api.nvim_buf_set_text(0, i, ebyte, i, ebyte_end, { M.gen({style, style, " ", " " }) })
 
 @script_variables+=
-local arrow_chars = {
+local arrow_chars_utf = {
   up = '▲', down = '▼', left = '◄', right = '►',
 }
 
@@ -201,9 +201,9 @@ end
 
 @determine_arrow_up_or_down+=
 if i == slnum-1 then
-  c = head or arrow_chars.up
+  c = head or arrow_chars_utf.up
 else
-  c = head or arrow_chars.down
+  c = head or arrow_chars_utf.down
 end
 
 @draw_horizontal_line+=
@@ -226,9 +226,9 @@ vim.api.nvim_buf_set_text(0, slnum-1, sbyte, slnum-1, ebyte, { line })
 
 @determine_if_arrow_left_or_right+=
 if i == scol then
-  c = head or arrow_chars.left
+  c = head or arrow_chars_utf.left
 else
-  c = head or arrow_chars.right
+  c = head or arrow_chars_utf.right
 end
 
 @connect_line_if_possible_vertical+=
