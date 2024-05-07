@@ -1,6 +1,6 @@
 ##../venn
 @implement+=
-function M.parse(sym)
+function M.parse_utf(sym)
   for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")

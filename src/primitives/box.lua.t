@@ -260,14 +260,14 @@ else
 end
 
 @connect_line_going_down+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[2] = style
   tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_up+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[1] = style
   tail = M.gen_utf(ptail_opts) or tail
@@ -302,42 +302,42 @@ else
 end
 
 @connect_line_going_right+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[4] = style
   tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_left+=
-local ptail_opts = M.parse(ptail)
+local ptail_opts = M.parse_utf(ptail)
 if ptail_opts then
   ptail_opts[3] = style
   tail = M.gen_utf(ptail_opts) or tail
 end
 
 @connect_line_going_right+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[3] = style
   head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_left+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[4] = style
   head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_down+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[1] = style
   head = M.gen_utf(phead_opts) or head
 end
 
 @connect_line_going_up+=
-local phead_opts = M.parse(phead)
+local phead_opts = M.parse_utf(phead)
 if phead_opts then
   phead_opts[2] = style
   head = M.gen_utf(phead_opts) or head

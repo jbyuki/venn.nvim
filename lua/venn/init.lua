@@ -185,13 +185,13 @@ function M.draw_box_utf(style)
 
       local phead = lines[#lines]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[2] = style
         tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[1] = style
         head = M.gen_utf(phead_opts) or head
@@ -208,13 +208,13 @@ function M.draw_box_utf(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[1] = style
         tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[2] = style
         head = M.gen_utf(phead_opts) or head
@@ -255,13 +255,13 @@ function M.draw_box_utf(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[4] = style
         tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[3] = style
         head = M.gen_utf(phead_opts) or head
@@ -278,13 +278,13 @@ function M.draw_box_utf(style)
 
       local phead = lines[1]:sub(sbyte+1, ebyte)
 
-      local ptail_opts = M.parse(ptail)
+      local ptail_opts = M.parse_utf(ptail)
       if ptail_opts then
         ptail_opts[3] = style
         tail = M.gen_utf(ptail_opts) or tail
       end
 
-      local phead_opts = M.parse(phead)
+      local phead_opts = M.parse_utf(phead)
       if phead_opts then
         phead_opts[4] = style
         head = M.gen_utf(phead_opts) or head
@@ -469,7 +469,7 @@ function M.draw_box_utf_over(style)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
       local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
       local c
       if i+1 == clnum then
@@ -503,7 +503,7 @@ function M.draw_box_utf_over(style)
 
       local pold = lines[1]:sub(sbyte+1, ebyte)
 
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
       local c
       if i == ccol then
@@ -542,21 +542,21 @@ function M.draw_box_utf_over(style)
       local pold = lines[1]:sub(sbyte+1, ebyte)
 
       if i == scol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[4] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, " ", style})
         topborder = topborder .. old
 
       elseif i == ecol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[2] = style
         pold_opts[3] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, style, " "})
         topborder = topborder .. old
 
       else
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style})
@@ -577,21 +577,21 @@ function M.draw_box_utf_over(style)
       local pold = lines[#lines]:sub(sbyte+1, ebyte)
 
       if i == scol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[4] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", " ", style})
         botborder = botborder .. old
 
       elseif i == ecol then
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[1] = style
         pold_opts[3] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", style, " "})
         botborder = botborder .. old
 
       else
-        local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+        local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
         pold_opts[3] = style
         pold_opts[4] = style
         local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style })
@@ -610,7 +610,7 @@ function M.draw_box_utf_over(style)
       local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
       local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
       local old = M.gen_utf(pold_opts)
@@ -623,7 +623,7 @@ function M.draw_box_utf_over(style)
       local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
 
       local pold = lines[i-slnum+2]:sub(ebyte+1, ebyte_end)
-      local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+      local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
       pold_opts[1] = style
       pold_opts[2] = style
       local old = M.gen_utf(pold_opts)
@@ -734,7 +734,7 @@ end
 function M.gen_utf(opts)
   return charset_utf[table.concat(opts, "")]
 end
-function M.parse(sym)
+function M.parse_utf(sym)
   for opt, c in pairs(charset_utf) do
     if c == sym then
       return vim.split(opt, "")

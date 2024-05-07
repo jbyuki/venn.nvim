@@ -46,21 +46,21 @@ local ebyte = M.get_bytes(lines[1], i+1)
 local pold = lines[1]:sub(sbyte+1, ebyte)
 
 @draw_upper_left_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[2] = style
 pold_opts[4] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, " ", style})
 topborder = topborder .. old
 
 @draw_upper_right_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[2] = style
 pold_opts[3] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({" ", style, style, " "})
 topborder = topborder .. old
 
 @draw_upper_edge_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[3] = style
 pold_opts[4] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style})
@@ -91,21 +91,21 @@ local ebyte = M.get_bytes(lines[#lines], i+1)
 local pold = lines[#lines]:sub(sbyte+1, ebyte)
 
 @draw_lower_left_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[4] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", " ", style})
 botborder = botborder .. old
 
 @draw_lower_right_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[3] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({style, " ", style, " "})
 botborder = botborder .. old
 
 @draw_lower_edge_over+=
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[3] = style
 pold_opts[4] = style
 local old = M.gen_utf(pold_opts) or M.gen_utf({" ", " ", style, style })
@@ -123,7 +123,7 @@ local sbyte = M.get_bytes(lines[i-slnum+2], scol)
 local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
 local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[2] = style
 local old = M.gen_utf(pold_opts)
@@ -137,7 +137,7 @@ local ebyte = M.get_bytes(lines[i-slnum+2], ecol)
 local ebyte_end = M.get_bytes(lines[i-slnum+2], ecol+1)
 
 local pold = lines[i-slnum+2]:sub(ebyte+1, ebyte_end)
-local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 pold_opts[1] = style
 pold_opts[2] = style
 local old = M.gen_utf(pold_opts)
@@ -151,7 +151,7 @@ for i=slnum-1,elnum-1 do
   local sbyte_end = M.get_bytes(lines[i-slnum+2], scol+1)
 
   local pold = lines[i-slnum+2]:sub(sbyte+1, sbyte_end)
-  local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+  local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
   local c
   if i+1 == clnum then
@@ -183,7 +183,7 @@ end
 local line = ''
 for i=scol,ecol do
   @get_character_at_position_top
-  local pold_opts = M.parse(pold) or { " ", " ", " ", " " }
+  local pold_opts = M.parse_utf(pold) or { " ", " ", " ", " " }
 
   local c
   if i == ccol then
