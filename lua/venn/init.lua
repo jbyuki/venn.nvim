@@ -114,6 +114,13 @@ local charset = {
   ["bb  "] = "┃",
   ["  bb"] = "━",
   ["  bb"] = "━",
+  -- rounded corners (r style) — edges reuse single-line chars
+  [" r r"] = "╭",
+  [" rr "] = "╮",
+  ["r  r"] = "╰",
+  ["r r "] = "╯",
+  ["  rr"] = "─",
+  ["rr  "] = "│",
 }
 local M = {}
 function M.log(str)
@@ -713,6 +720,178 @@ function M.fill_box()
     end
 
     vim.api.nvim_buf_set_text(0, i, sbyte, i, ebyte, { line })
+  end
+end
+
+function M.align_box(align)
+  local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
+  local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
+
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+  local scol = M.get_width(lines[1], sbyte-1) + vscol
+
+  local function char_at(line, col)
+    local lw = M.get_width(line)
+    if col < 0 or col >= lw then return " " end
+    local sb = M.get_bytes(line, col)
+    local eb = M.get_bytes(line, col+1)
+    return line:sub(sb+1, eb)
+  end
+
+  -- any box char with a vertical component is a wall
+  local function is_wall(ch)
+    if ch == " " then return false end
+    local opts = M.parse(ch)
+    return opts ~= nil and not (opts[1] == " " and opts[2] == " ")
+  end
+
+  for i=1,#lines do
+    local lnum = slnum - 1 + (i-1)
+    local line = lines[i]
+    local lw = M.get_width(line)
+
+    -- scan left from selection to find left wall
+    local left = 0
+    for col = scol - 1, 0, -1 do
+      if is_wall(char_at(line, col)) then
+        left = col + 1
+        break
+      end
+    end
+
+    -- scan right from selection to find right wall
+    local right = lw - 1
+    for col = scol + 1, lw - 1 do
+      if is_wall(char_at(line, col)) then
+        right = col - 1
+        break
+      end
+    end
+
+    local width = right - left + 1
+    if width > 0 then
+      if lw <= right then
+        local extend = string.rep(" ", right - lw + 1)
+        vim.api.nvim_buf_set_text(0, lnum, string.len(line), lnum, string.len(line), { extend })
+        line = vim.api.nvim_buf_get_lines(0, lnum, lnum+1, true)[1]
+      end
+
+      local sb = M.get_bytes(line, left)
+      local eb = M.get_bytes(line, right + 1)
+      local text = line:sub(sb+1, eb):match("^%s*(.-)%s*$")
+      local tw = vim.fn.strdisplaywidth(text)
+
+      local new_seg
+      if tw >= width then
+        new_seg = text
+      elseif align == "left" then
+        new_seg = text .. string.rep(" ", width - tw)
+      elseif align == "right" then
+        new_seg = string.rep(" ", width - tw) .. text
+      else
+        local lpad = math.floor((width - tw) / 2)
+        new_seg = string.rep(" ", lpad) .. text .. string.rep(" ", width - tw - lpad)
+      end
+
+      vim.api.nvim_buf_set_text(0, lnum, sb, lnum, eb, { new_seg })
+    end
+  end
+end
+
+function M.div_box()
+  local style = "s"
+  local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
+  local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
+
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+  local scol = M.get_width(lines[1], sbyte-1) + vscol
+  local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
+
+  if scol > ecol then
+    scol, ecol = ecol, scol
+  end
+
+  local w = ecol - scol + 1
+  local h = elnum - slnum + 1
+
+  for i=1,#lines do
+    local len = M.get_width(lines[i])
+    local diff = ecol - len + 1
+    if diff > 0 then
+      local extend = string.rep(" ", diff)
+      local eol = string.len(lines[i])
+      vim.api.nvim_buf_set_text(0, slnum-1+(i-1), eol, slnum-1+(i-1), eol, { extend })
+      lines[i] = lines[i] .. extend
+    end
+  end
+
+  if h == 1 then
+    local line = ""
+    for i=scol,ecol do
+      local sb = M.get_bytes(lines[1], i)
+      local eb = M.get_bytes(lines[1], i+1)
+      local opts = M.parse(lines[1]:sub(sb+1, eb)) or {" ", " ", " ", " "}
+      if i == scol then
+        opts[4] = style
+      elseif i == ecol then
+        opts[3] = style
+      else
+        opts[3] = style
+        opts[4] = style
+      end
+      line = line .. (M.gen(opts) or M.gen({" ", " ", style, style}))
+    end
+    local sb = M.get_bytes(lines[1], scol)
+    local eb = M.get_bytes(lines[1], ecol+1)
+    vim.api.nvim_buf_set_text(0, slnum-1, sb, slnum-1, eb, { line })
+
+  elseif w == 1 then
+    for i=slnum-1,elnum-1 do
+      local sb = M.get_bytes(lines[i-slnum+2], scol)
+      local eb = M.get_bytes(lines[i-slnum+2], scol+1)
+      local opts = M.parse(lines[i-slnum+2]:sub(sb+1, eb)) or {" ", " ", " ", " "}
+      if i == slnum-1 then
+        opts[2] = style
+      elseif i == elnum-1 then
+        opts[1] = style
+      else
+        opts[1] = style
+        opts[2] = style
+      end
+      local c = M.gen(opts) or M.gen({style, style, " ", " "})
+      vim.api.nvim_buf_set_text(0, i, sb, i, eb, { c })
+    end
+  end
+end
+
+function M.erase_box()
+  local _,slnum,sbyte,vscol = unpack(vim.fn.getpos("'<"))
+  local _,elnum,ebyte,vecol = unpack(vim.fn.getpos("'>"))
+
+  local lines = vim.api.nvim_buf_get_lines(0, slnum-1, elnum, true)
+  local scol = M.get_width(lines[1], sbyte-1) + vscol
+  local ecol = M.get_width(lines[#lines], ebyte-1) + vecol
+
+  if scol > ecol then
+    scol, ecol = ecol, scol
+  end
+
+  for i=1,#lines do
+    local len = M.get_width(lines[i])
+    local diff = ecol - len + 1
+    if diff > 0 then
+      local extend = string.rep(" ", diff)
+      local eol = string.len(lines[i])
+      vim.api.nvim_buf_set_text(0, slnum-1+(i-1), eol, slnum-1+(i-1), eol, { extend })
+      lines[i] = lines[i] .. extend
+    end
+  end
+
+  local blank = string.rep(" ", ecol - scol + 1)
+  for i=slnum-1,elnum-1 do
+    local sbyte = M.get_bytes(lines[i-slnum+2], scol)
+    local ebyte = M.get_bytes(lines[i-slnum+2], ecol+1)
+    vim.api.nvim_buf_set_text(0, i, sbyte, i, ebyte, { blank })
   end
 end
 
