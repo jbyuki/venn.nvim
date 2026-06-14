@@ -29,6 +29,32 @@ Usage
 
 * Invoke `:VBox`. This will draw a rectangle. In case, it has a width or a height of 1, it will draw a line.
 
+Commands
+--------
+
+### Drawing boxes
+
+| Command | Description |
+|---------|-------------|
+| `:VBox` | Draw a single-line box (or line if selection is 1-wide/tall) |
+| `:VBoxD` | Draw a double-line box |
+| `:VBoxH` | Draw a bold/heavy-line box |
+| `:VBoxR` | Draw a box with rounded corners (`╭╮╰╯`) |
+| `:VBoxO` | Draw single-line box, merging with existing characters |
+| `:VBoxDO` | Draw double-line box, merging with existing characters |
+| `:VBoxHO` | Draw bold-line box, merging with existing characters |
+
+### Editing content
+
+| Command | Description |
+|---------|-------------|
+| `:VFill` | Fill selection with `█` |
+| `:VErase` | Fill selection with spaces (inverse of `:VFill`) |
+| `:VDiv` | Draw an interior divider that auto-connects to box walls (`├────┤`) |
+| `:VAlignL` | Align text left within the nearest box walls |
+| `:VAlignC` | Align text center within the nearest box walls |
+| `:VAlignR` | Align text right within the nearest box walls |
+
 Key Mapping
 -----------
 
